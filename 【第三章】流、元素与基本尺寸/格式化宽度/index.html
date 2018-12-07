@@ -6,22 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>格式化宽度</title>
     <style>
-        .container1 {
+        .fixed {
+            position: fixed;
+            border: 1px solid blue;
+        }
+
+        .container1,
+        .container2 {
             position: relative;
             width: 1000px;
             border: 1px solid red;
         }
+
         .container1 p {
             position: absolute;
             border: 1px solid blue;
             padding: 20px;
         }
 
-        .container2 {
-            position: relative;
-            width: 1000px;
-            border: 1px solid red;
-        }
         .container2 p {
             position: absolute;
             left: 20px;
@@ -32,9 +34,16 @@
 </head>
 <body>
     <h1>格式化宽度仅出现在“绝对定位模型”中，也就是出现在position属性值为absolute和fixed的元素中。在默认情况下，绝对定位元素的宽度表现是“包裹性”，宽度由内部尺寸决定</h1>
+    <p class="fixed">position: fixed</p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
     <div class="container1">
-        <span>container1 width: 1000px</span>
-        <p>hello world</p>
+        <span>container1 width: 1000px; position: relative</span>
+        <p>position: absolute</p>
     </div>
 
     <br>
@@ -46,7 +55,7 @@
 
     <h1>对于非替换元素，当left/right或top/bottom对立方位的属性值同时存在的时候，元素的宽度表现为“格式化宽度”，其宽度大小相对于最近的具有定位特性(position属性值不是static)的祖先元素计算</h1>
     <div class="container2">
-        <span>container2 width: 1000px</span>
+        <span>container2 width: 1000px; position: relative</span>
         <p> width = 1000 - 20 - 20</p>
     </div>
 </body>
