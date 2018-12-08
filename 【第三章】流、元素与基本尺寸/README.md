@@ -25,6 +25,8 @@
             - [如何让元素支持height:100%效果](#%E5%A6%82%E4%BD%95%E8%AE%A9%E5%85%83%E7%B4%A0%E6%94%AF%E6%8C%81height100%E6%95%88%E6%9E%9C)
                 - [设定显式的高度值](#%E8%AE%BE%E5%AE%9A%E6%98%BE%E5%BC%8F%E7%9A%84%E9%AB%98%E5%BA%A6%E5%80%BC)
                 - [使用绝对定位](#%E4%BD%BF%E7%94%A8%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D)
+    - [CSS min-width/max-width和min-height/max-height二三事](#css-min-widthmax-width%E5%92%8Cmin-heightmax-height%E4%BA%8C%E4%B8%89%E4%BA%8B)
+        - [为流体而生的min-width/max-width](#%E4%B8%BA%E6%B5%81%E4%BD%93%E8%80%8C%E7%94%9F%E7%9A%84min-widthmax-width)
 
 # 【第三章】流、元素与基本尺寸
 HTML标签通常分为块级元素(block-level element)和内联元素(inline element)
@@ -161,13 +163,13 @@ width是作用在“内在盒子”上的，乍一看是一个普通的盒子，
 
 引用一张chrome的盒子模型图
 
-> “内在盒子”又被分为了4个盒子，分别是content box、padding box、border box和margin box
+> “内在盒子”又被分为了4个盒子，分别是content box、padding box、border box和margin box
 
-content box写作content-box，padding-box写作padding-box，border box写作border-box，margin box写作...突然发现，margin box居然没有名字！为何唯独margin box并没有对应的css关键字名称呢？因为目前没有任何场景需要用到margin box
+content box写作content-box，padding-box写作padding-box，border box写作border-box，margin box写作...突然发现，margin box居然没有名字！为何唯独margin box并没有对应的css关键字名称呢？因为目前没有任何场景需要用到margin box
 
-"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-size的属性值存在也就没有意义
+"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-size的属性值存在也就没有意义
 
-> 在css2.1的规范中，有一段非常露骨的描述：content box环绕着width和height给定的矩形。也就是说width和height默认作用在content box上
+> 在css2.1的规范中，有一段非常露骨的描述：content box环绕着width和height给定的矩形。也就是说width和height默认作用在content box上
 
 > 有时候这这宽度的设定和表现并不合理，一个元素一旦设置具体的width值，则元素的流动性就会被阻断，“流动性丢失”
 
@@ -209,9 +211,9 @@ width是作用在“内在盒子”上的，乍一看是一个普通的盒子，
 box-sizing虽然是css3的属性，但是，让人受宠若惊的是IE8浏览器也是支持它的，不过需要加-ms-私有前缀，但IE9浏览器开始就不需要私有前缀了
 
 #### box-sizing的作用
-box-size顾名思义就是“盒尺寸”。虽然box-sizing被直译为“盒尺寸”，实际上，其更准确的叫法应该是“盒尺寸的作用细节”，或者说得更通俗一点，叫“width作用的细节”，也就是说box-sizing属性是改变width的作用细节
+box-size顾名思义就是“盒尺寸”。虽然box-sizing被直译为“盒尺寸”，实际上，其更准确的叫法应该是“盒尺寸的作用细节”，或者说得更通俗一点，叫“width作用的细节”，也就是说box-sizing属性是改变width的作用细节
 
-> 那它改变了什么细节？一句话，改变了width作用的盒子。还记不记得“内在盒子”的4个盒子？它们分别是content box、padding box、border box和margin box。默认情况下，width是作用在content box上的，**box-sizing的作用就是可以把width作用的盒子变成其它几个**
+> 那它改变了什么细节？一句话，改变了width作用的盒子。还记不记得“内在盒子”的4个盒子？它们分别是content box、padding box、border box和margin box。默认情况下，width是作用在content box上的，**box-sizing的作用就是可以把width作用的盒子变成其它几个**
 
 ```css
 .box1 { box-sizing: content-box; } /* 默认值 */
@@ -232,9 +234,9 @@ box-size顾名思义就是“盒尺寸”。虽然box-sizing被直译为“盒�
 + 这种做法并不能解决所有问题。box-sizing不支持margin-box，只有当元素没有水平margin时候，box-sizing才能真正无计算，而“宽度分离”等策略则可以彻底解决所有的宽度计算的问题
 
 #### box-sizing发明的初衷
-在css世界中，唯一离不开box-sizing:border-box的就是原生普通文本框input和文本域textarea的100%自适应父容器宽度
+在css世界中，唯一离不开box-sizing:border-box的就是原生普通文本框input和文本域textarea的100%自适应父容器宽度
 
-拿文本域textarea举例，**textarea为替换元素，替换元素的特性之一就是尺寸由内部元素决定，且无论其display属性值是inline还是block**。这个特性很有意思，对于非替换元素，如果其display属性值为block，则会具有流动性，宽度由外部尺寸决定，但是替换元素的宽度却不受display水平影响，因此通过css修改textarea的display水平是无法水平让尺寸100%自适应父容器的
+拿文本域textarea举例，**textarea为替换元素，替换元素的特性之一就是尺寸由内部元素决定，且无论其display属性值是inline还是block**。这个特性很有意思，对于非替换元素，如果其display属性值为block，则会具有流动性，宽度由外部尺寸决定，但是替换元素的宽度却不受display水平影响，因此通过css修改textarea的display水平是无法水平让尺寸100%自适应父容器的
 
 ```css
 textarea {
@@ -272,7 +274,7 @@ width和height是css世界中同一类型的魔法师，都是直接限定元素
 
 height:auto要比width:auto简单而单纯得多。原因在于，css的默认流是水平方向的，宽度是稀缺的，高度是无限的。因此，宽度的分配规则就比较复杂，高度就显得比较随意
 
-此外，height:auto也有外部尺寸特性。其仅存在于绝对定位模型中，也就是“格式化高度”与“格式化宽度”
+此外，height:auto也有外部尺寸特性。其仅存在于绝对定位模型中，也就是“格式化高度”与“格式化宽度”
 
 ### 关于height:100%
 height和width还有一个比较明显的区别就是对百分比单位的支持。对于width属性，就算父元素width为auto，其百分比也是支持的；但是，**对于height属性，如果父元素height为auto，只要子元素在文档流中，其百分比值完全就被忽略了。**
@@ -295,7 +297,7 @@ html, body {
 
 👉 [example](./height100%/index.html)
 
-并且仅仅设置body也是不行的，因为此时的body也没有具体的高度值
+并且仅仅设置body也是不行的，因为此时的body也没有具体的高度值
 
 > **发现对于普通文档流中的元素，百分比高度值要想起作用，其父级必须有一个可以生效的高度值！**
 
@@ -330,14 +332,42 @@ div {
 }
 ```
 
-此时的height:100%就会有计算值，即使祖先元素的height计算能力为auto也是如此。需要注意的是，绝对定位元素的百分比计算和非绝对定位的百分比计算是有区别的，区别在于绝对定位的宽高百分比计算是相对与padding box的，也就是说会把padding大小的值计算在内，但是，非绝对定位元素则是相对于content box计算的
+此时的height:100%就会有计算值，即使祖先元素的height计算能力为auto也是如此。需要注意的是，绝对定位元素的百分比计算和非绝对定位的百分比计算是有区别的，区别在于绝对定位的宽高百分比计算是相对与padding box的，也就是说会把padding大小的值计算在内，但是，非绝对定位元素则是相对于content box计算的
 
 👉 [example](https://demo.cssworld.cn/3/2-11.php)
 
-> **可以看到非定位元素的宽高百分比计算不会将padding计算在内**
+> **可以看到非定位元素的宽高百分比计算不会将padding计算在内**
 
-> 这两种height:100%生效方法的评价是：显式高度方法中规中矩，意料之中；绝对定位方法剑走偏锋，支持隐式高度计算，给人意外之喜，但本身脱离文档流，使其仅在某些场景有四两拨千斤的效果
+> 这两种height:100%生效方法的评价是：显式高度方法中规中矩，意料之中；绝对定位方法剑走偏锋，支持隐式高度计算，给人意外之喜，但本身脱离文档流，使其仅在某些场景有四两拨千斤的效果
 
 👉 [example](https://demo.cssworld.cn/3/2-12.php)
 
-只要在图片上覆盖两个绝对定位，同事设height:100%，则无论图片多高，我们的左右半区都能自动和图片高度一模一样，无须任何使用javascript计算
+只要在图片上覆盖两个绝对定位，同时设height:100%，则无论图片多高，我们的左右半区都能自动和图片高度一模一样，无须任何使用javascript计算
+
+## CSS min-width/max-width和min-height/max-height二三事
+说完了width和height，下面轮到min-widht/max-width和min-height/max-height了，它们有很多共性。比方说，它们都是与尺寸相关的，盒尺寸机制和一些值的渲染规则也是一样的。
+
+### 为流体而生的min-width/max-width
+在css世界中，min-width/max-width出现的场景一定是自适应布局或者流体布局中。因为，如果是那种width/height定死的砖头布局，min-width/max-width就没有任何出现的价值，因为它们是具有边界行为的属性，所以没有变化自然无法触发，也就没有使用价值
+
+比如，网页宽度在1200～1400像素自适应，既满足大屏的大气又满足笔记本的良好显示，此时，min-width/max-width就可以大显神威了
+
+```css
+.container {
+    min-width: 1200px;
+    max-width: 1400px;
+}
+```
+
+对，无需width设置，直接使用min-width/max-width
+
+还可能，公众号的热门文章中，经常会有图片，这些图片都是用户上传产生的，因此尺寸会有大有小，为了避免图片在移动端展示过大的影响体验，常常会有下面的max-width限制
+
+```css
+img {
+    max-width: 100%;
+    height: auto!important;
+}
+```
+
+**height:auto是必须的，否则，如果原始图片有设定height，max-widht生效的时候图片就会被水平压缩。强制height为auto可以确保宽度不超出的同时使图片保持原来的比例。** 但这样也会有体验上的问题，那就是在加载时图片占据高度会从0变成计算高度，图文会有明显的瀑布式下落
