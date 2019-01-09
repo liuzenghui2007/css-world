@@ -1,32 +1,37 @@
 - [【第三章】流、元素与基本尺寸](#%E7%AC%AC%E4%B8%89%E7%AB%A0%E6%B5%81%E5%85%83%E7%B4%A0%E4%B8%8E%E5%9F%BA%E6%9C%AC%E5%B0%BA%E5%AF%B8)
-    - [块级元素](#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0)
-        - [为什么list-item元素会出现项目符号](#%E4%B8%BA%E4%BB%80%E4%B9%88list-item%E5%85%83%E7%B4%A0%E4%BC%9A%E5%87%BA%E7%8E%B0%E9%A1%B9%E7%9B%AE%E7%AC%A6%E5%8F%B7)
-        - [width/height作用在哪个盒子上](#widthheight%E4%BD%9C%E7%94%A8%E5%9C%A8%E5%93%AA%E4%B8%AA%E7%9B%92%E5%AD%90%E4%B8%8A)
-    - [width/height作用的具体细节](#widthheight%E4%BD%9C%E7%94%A8%E7%9A%84%E5%85%B7%E4%BD%93%E7%BB%86%E8%8A%82)
-        - [深藏不露的width:auto](#%E6%B7%B1%E8%97%8F%E4%B8%8D%E9%9C%B2%E7%9A%84widthauto)
-            - [外部尺寸与流体特性](#%E5%A4%96%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7)
-                - [1.正常流宽度 100%](#1%E6%AD%A3%E5%B8%B8%E6%B5%81%E5%AE%BD%E5%BA%A6-100)
-                - [2.格式化宽度](#2%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AE%BD%E5%BA%A6)
-            - [内部尺寸与流体特性](#%E5%86%85%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7)
-                - [1.包裹性](#1%E5%8C%85%E8%A3%B9%E6%80%A7)
-                - [2.首选最小宽度](#2%E9%A6%96%E9%80%89%E6%9C%80%E5%B0%8F%E5%AE%BD%E5%BA%A6)
-                - [3.最大宽度](#3%E6%9C%80%E5%A4%A7%E5%AE%BD%E5%BA%A6)
-        - [width值作用的细节](#width%E5%80%BC%E4%BD%9C%E7%94%A8%E7%9A%84%E7%BB%86%E8%8A%82)
-        - [css流体布局下的宽度分离原则](#css%E6%B5%81%E4%BD%93%E5%B8%83%E5%B1%80%E4%B8%8B%E7%9A%84%E5%AE%BD%E5%BA%A6%E5%88%86%E7%A6%BB%E5%8E%9F%E5%88%99)
-            - [为何要宽度分离](#%E4%B8%BA%E4%BD%95%E8%A6%81%E5%AE%BD%E5%BA%A6%E5%88%86%E7%A6%BB)
-        - [改变width/height作用细节的box-sizing](#%E6%94%B9%E5%8F%98widthheight%E4%BD%9C%E7%94%A8%E7%BB%86%E8%8A%82%E7%9A%84box-sizing)
-            - [box-sizing的作用](#box-sizing%E7%9A%84%E4%BD%9C%E7%94%A8)
-            - [为何box-sizing不支持margin-box](#%E4%B8%BA%E4%BD%95box-sizing%E4%B8%8D%E6%94%AF%E6%8C%81margin-box)
-            - [如何评价*{box-sizing: border-box}](#%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B7box-sizing-border-box)
-            - [box-sizing发明的初衷](#box-sizing%E5%8F%91%E6%98%8E%E7%9A%84%E5%88%9D%E8%A1%B7)
-        - [相对简单而单纯的height:auto](#%E7%9B%B8%E5%AF%B9%E7%AE%80%E5%8D%95%E8%80%8C%E5%8D%95%E7%BA%AF%E7%9A%84heightauto)
-        - [关于height:100%](#%E5%85%B3%E4%BA%8Eheight100)
-            - [为何height:100%无效](#%E4%B8%BA%E4%BD%95height100%E6%97%A0%E6%95%88)
-            - [如何让元素支持height:100%效果](#%E5%A6%82%E4%BD%95%E8%AE%A9%E5%85%83%E7%B4%A0%E6%94%AF%E6%8C%81height100%E6%95%88%E6%9E%9C)
-                - [设定显式的高度值](#%E8%AE%BE%E5%AE%9A%E6%98%BE%E5%BC%8F%E7%9A%84%E9%AB%98%E5%BA%A6%E5%80%BC)
-                - [使用绝对定位](#%E4%BD%BF%E7%94%A8%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D)
-    - [CSS min-width/max-width和min-height/max-height二三事](#css-min-widthmax-width%E5%92%8Cmin-heightmax-height%E4%BA%8C%E4%B8%89%E4%BA%8B)
-        - [为流体而生的min-width/max-width](#%E4%B8%BA%E6%B5%81%E4%BD%93%E8%80%8C%E7%94%9F%E7%9A%84min-widthmax-width)
+  - [块级元素](#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0)
+    - [为什么list-item元素会出现项目符号](#%E4%B8%BA%E4%BB%80%E4%B9%88list-item%E5%85%83%E7%B4%A0%E4%BC%9A%E5%87%BA%E7%8E%B0%E9%A1%B9%E7%9B%AE%E7%AC%A6%E5%8F%B7)
+    - [width/height作用在哪个盒子上](#widthheight%E4%BD%9C%E7%94%A8%E5%9C%A8%E5%93%AA%E4%B8%AA%E7%9B%92%E5%AD%90%E4%B8%8A)
+  - [width/height作用的具体细节](#widthheight%E4%BD%9C%E7%94%A8%E7%9A%84%E5%85%B7%E4%BD%93%E7%BB%86%E8%8A%82)
+    - [深藏不露的width:auto](#%E6%B7%B1%E8%97%8F%E4%B8%8D%E9%9C%B2%E7%9A%84widthauto)
+      - [外部尺寸与流体特性](#%E5%A4%96%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7)
+        - [1.正常流宽度 100%](#1%E6%AD%A3%E5%B8%B8%E6%B5%81%E5%AE%BD%E5%BA%A6-100)
+        - [2.格式化宽度](#2%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AE%BD%E5%BA%A6)
+      - [内部尺寸与流体特性](#%E5%86%85%E9%83%A8%E5%B0%BA%E5%AF%B8%E4%B8%8E%E6%B5%81%E4%BD%93%E7%89%B9%E6%80%A7)
+        - [1.包裹性](#1%E5%8C%85%E8%A3%B9%E6%80%A7)
+        - [2.首选最小宽度](#2%E9%A6%96%E9%80%89%E6%9C%80%E5%B0%8F%E5%AE%BD%E5%BA%A6)
+        - [3.最大宽度](#3%E6%9C%80%E5%A4%A7%E5%AE%BD%E5%BA%A6)
+    - [width值作用的细节](#width%E5%80%BC%E4%BD%9C%E7%94%A8%E7%9A%84%E7%BB%86%E8%8A%82)
+    - [css流体布局下的宽度分离原则](#css%E6%B5%81%E4%BD%93%E5%B8%83%E5%B1%80%E4%B8%8B%E7%9A%84%E5%AE%BD%E5%BA%A6%E5%88%86%E7%A6%BB%E5%8E%9F%E5%88%99)
+      - [为何要宽度分离](#%E4%B8%BA%E4%BD%95%E8%A6%81%E5%AE%BD%E5%BA%A6%E5%88%86%E7%A6%BB)
+    - [改变width/height作用细节的box-sizing](#%E6%94%B9%E5%8F%98widthheight%E4%BD%9C%E7%94%A8%E7%BB%86%E8%8A%82%E7%9A%84box-sizing)
+      - [box-sizing的作用](#box-sizing%E7%9A%84%E4%BD%9C%E7%94%A8)
+      - [为何box-sizing不支持margin-box](#%E4%B8%BA%E4%BD%95box-sizing%E4%B8%8D%E6%94%AF%E6%8C%81margin-box)
+      - [如何评价*{box-sizing: border-box}](#%E5%A6%82%E4%BD%95%E8%AF%84%E4%BB%B7box-sizing-border-box)
+      - [box-sizing发明的初衷](#box-sizing%E5%8F%91%E6%98%8E%E7%9A%84%E5%88%9D%E8%A1%B7)
+    - [相对简单而单纯的height:auto](#%E7%9B%B8%E5%AF%B9%E7%AE%80%E5%8D%95%E8%80%8C%E5%8D%95%E7%BA%AF%E7%9A%84heightauto)
+    - [关于height:100%](#%E5%85%B3%E4%BA%8Eheight100)
+      - [为何height:100%无效](#%E4%B8%BA%E4%BD%95height100%E6%97%A0%E6%95%88)
+      - [如何让元素支持height:100%效果](#%E5%A6%82%E4%BD%95%E8%AE%A9%E5%85%83%E7%B4%A0%E6%94%AF%E6%8C%81height100%E6%95%88%E6%9E%9C)
+        - [设定显式的高度值](#%E8%AE%BE%E5%AE%9A%E6%98%BE%E5%BC%8F%E7%9A%84%E9%AB%98%E5%BA%A6%E5%80%BC)
+        - [使用绝对定位](#%E4%BD%BF%E7%94%A8%E7%BB%9D%E5%AF%B9%E5%AE%9A%E4%BD%8D)
+  - [CSS min-width/max-width和min-height/max-height二三事](#css-min-widthmax-width%E5%92%8Cmin-heightmax-height%E4%BA%8C%E4%B8%89%E4%BA%8B)
+    - [为流体而生的min-width/max-width](#%E4%B8%BA%E6%B5%81%E4%BD%93%E8%80%8C%E7%94%9F%E7%9A%84min-widthmax-width)
+    - [与众不同的初始值](#%E4%B8%8E%E4%BC%97%E4%B8%8D%E5%90%8C%E7%9A%84%E5%88%9D%E5%A7%8B%E5%80%BC)
+    - [超越!important，超越最大](#%E8%B6%85%E8%B6%8Aimportant%E8%B6%85%E8%B6%8A%E6%9C%80%E5%A4%A7)
+      - [超越!important](#%E8%B6%85%E8%B6%8Aimportant)
+      - [超越最大](#%E8%B6%85%E8%B6%8A%E6%9C%80%E5%A4%A7)
+    - [任意高度元素的展开收起动画技术](#%E4%BB%BB%E6%84%8F%E9%AB%98%E5%BA%A6%E5%85%83%E7%B4%A0%E7%9A%84%E5%B1%95%E5%BC%80%E6%94%B6%E8%B5%B7%E5%8A%A8%E7%94%BB%E6%8A%80%E6%9C%AF)
 
 # 【第三章】流、元素与基本尺寸
 HTML标签通常分为块级元素(block-level element)和内联元素(inline element)
@@ -38,7 +43,7 @@ HTML标签通常分为块级元素(block-level element)和内联元素(inline el
 ```css
 .clear::after{
     content: '';
-    display: table; // 也可以是block，或则是list-item
+    display: table; /* 也可以是block，或则是list-item */
     clear: both;
 }
 ```
@@ -136,7 +141,7 @@ a元素默认display是inline，所以，设置display:block使其块状化绝�
 
 所谓“首选最小宽度”，指的是元素最适合的最小宽度。接着上面的例子，外部容器的宽度是240像素，假设宽度是0，请问里面的inline-block元素的宽度是多少？
 
-> 是0吗？不是。在css世界中，图片和文字的权重要远大于布局，因此，css的设计者显然是不会让图文在width:auto时宽度变成0，此时所表现的宽度就是“首选最小宽度”
+> 是0吗？不是。在css世界中，**图片和文字的权重要远大于布局**，因此，css的设计者显然是不会让图文在width:auto时宽度变成0，此时所表现的宽度就是“首选最小宽度”
 
 > + 东亚文字(如中文)最小宽度为每个汉字的宽度
 > + 西方汉字最小宽度由特定的连续的英文字符单元决定，如果想让英文字符和中文一样，每一个字符都用都用最小宽度单元，可以试试css中的word-break: break-all
@@ -171,7 +176,7 @@ content box写作content-box，padding-box写作padding-box，border box写作bo
 
 > 在css2.1的规范中，有一段非常露骨的描述：content box环绕着width和height给定的矩形。也就是说width和height默认作用在content box上
 
-> 有时候这这宽度的设定和表现并不合理，一个元素一旦设置具体的width值，则元素的流动性就会被阻断，“流动性丢失”
+> 有时候宽度的设定和表现并不合理，一个元素一旦设置具体的width值，则元素的流动性就会被阻断，“流动性丢失”
 
 ### css流体布局下的宽度分离原则
 所谓“宽度分离原则”就是css中的width属性不与影响宽度的padding/border（有时候包括margin）属性共存，也就是不能出现以下组合:
@@ -181,7 +186,7 @@ content box写作content-box，padding-box写作padding-box，border box写作bo
     width: 100px;
     border: 1px solid;
 }
-// 或者
+/* 或者 */
 .box {
     width: 100px;
     padding: 20px;
@@ -295,7 +300,7 @@ html, body {
 }
 ```
 
-👉 [example](./height100%/index.html)
+👉 [example](./height/index.html)
 
 并且仅仅设置body也是不行的，因为此时的body也没有具体的高度值
 
@@ -371,3 +376,112 @@ img {
 ```
 
 **height:auto是必须的，否则，如果原始图片有设定height，max-widht生效的时候图片就会被水平压缩。强制height为auto可以确保宽度不超出的同时使图片保持原来的比例。** 但这样也会有体验上的问题，那就是在加载时图片占据高度会从0变成计算高度，图文会有明显的瀑布式下落
+
+### 与众不同的初始值
+width/height的默认值是auto，而min-width/max-width和min-height/max-height的初始值则要复杂些。这里要分为两部分，分别是max- *系列和min- *。max-width和max-height的初始值是none，min-width和min-height的初始值......
+
+虽然MDN和W3C维基的文档上都显示min-width/min-height的初始值是0，但是根据分析和测试，**所有浏览器中的min-width/min-height的初值为都是auto**
+
+证据如下：
++ min-width/height值为auto合法。例如
+```html
+<body style="min-width: auto;">
+<!-- 结果所有浏览器下 -->
+<!-- document.body.style.minWidth; // 结果为auto -->
+```
+> 说明min-*支持auto值，同样，如果是max-width，结果则是''，进一步说明min-width/height值为auto合法
++ **数值变化无动画**。假设元素的min-width/min-height的初始值是0，那么，当我们设置transition过渡同时改变了min-width/min-height值，岂不是应该有动画效果？结果
+```css
+.box {
+    transition: min-height .3s;
+}
+
+.box:hover {
+    min-height: 300px
+}
+/* 鼠标经过.box元素，元素突然变高，并无动画效果，但是如果下面这样的设置 */
+.box {
+    min-height: 0;
+    transition: min-height .3s;
+}
+
+.box:hover {
+    min-height: 300px;
+}
+```
+> 鼠标经过.box元素，transition动画效果就出现了。这就证明了，**min-height的初始值不是0，既然不是0，那就应该是所有浏览器都支持的auto**
+
+> 于是，得到结论如下：min-weidht/min-height的初始值是auto，max-width/max-height的初始值是none
+
+max-weidth/max-height的初始值是none而不是auto呢？
+
+不妨举个简单的例子解释一下，已知父元素宽度400像素，子元素设置宽度800像素，假如说max-width初始值是auto，那自然使用和width一样的解析渲染规则，此时max-width的计算值就应该是父元素的400像素，此时，你就会发现，子元素的800像素直接完蛋了，因为max-width会覆盖width。于是我们的width永远不能设置为比auto计算值更大的宽度值了，这显示是有问题的，这就是为什么max-width初始值是none的原因
+
+### 超越!important，超越最大
+CSS世界中，min-width/max-width和min-height/max-height属性间，以及与width和height之间有一套相互覆盖的规则。这套规则用一句比较通俗的话概括就是：超越!important，超越最大
+
+#### 超越!important
+**超越!important指的是max-width会覆盖width，而且这种覆盖不是普通的覆盖，是超级覆盖，覆盖到什么程度呢？大家应该都知道CSS世界中的!important的权重相当高，在业界，往往会把!important的权重比成“泰坦尼克号”，比直接在元素的style属性中设置CSS声明还要高。一般用在CSS覆盖javascript设置上。** 但是，就是这么厉害的!important，直接被max-width一个浪头就拍沉了
+
+比方说，针对下面的HTML和CSS设置，图片最后呈现的宽度是多少？
+```html
+<img scr="1.jpg" style="width: 480px!important;"/>
+<style>
+    img {
+        max-width: 256px;
+    }
+</style>
+```
+答案是256px。style、!important通通靠边站！因为max-width会覆盖width
+
+👉 [example](https://demo.cssworld.cn/3/3-1.php)
+
+#### 超越最大
+超越最大值得是min-width覆盖max-width，此规则发生在min-width和max-width冲突时
+
+```css
+.container {
+    min-width: 1400px;
+    max-width: 1200px;
+}
+```
+最小宽度居然比最大宽度设置得还要打，此时，两者必定是你死我活的状态。究竟谁死呢？遵循“超越最大”规则(注意不是“后台者居上”规则)，min-width活下来，max-width被忽略，于是，.container元素表现为至少1400像素宽
+
+### 任意高度元素的展开收起动画技术
+"展开收起"效果是网页中比较常见的一种交互形式，通常的做法是控制display属性值在none和其它值之间切换。虽然功能可以实现，但是效果略显生硬，所以就会有这样的需求--希望元素展开收起时能有明显的高度滑动效果。传统实现可以使用jQuery的slideUp()/slideDown()方法，但是，在移动端，因为CSS动画支持良好，此时，使用CSS实现动画就成了最佳的技术选型
+
+第一反应就是使用height + overflow:hidden实现，但是，很多时候我们展开的元素内容是动态的，换句话说高度不是固定的，因此，height使用的值是默认的auto，应该都知道的auto是个关键字值，并非数值，正如height: 100%的100%无法和auto相计算一样，从0px到auto是无法计算的，因此无法形成过渡或动画效果
+
+```css
+/* 因此，下面代码呈现的效果也是生硬的展开和收起 */
+.element {
+    height: 0;
+    overflow: hidden;
+    transition: height .25s;
+}
+
+.element.active {
+    height: auto; /* 没有transition效果，只是生硬的展开 */
+}
+
+/* 难道就没有什么一劳永逸的实现方法吗？有，不妨试试max-height */
+.element {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .25s;
+}
+
+.element.active {
+    max-height: 666px /* 一个足够大的高度值 */
+}
+```
+
+> **其中展开后的max-height值，我们只需要设定为保证比展开内容高度大的值就可以，因为max-height值比height计算值大的时候，元素的高度就是height属性的计算高度,**
+
+在本交互中，也就是height: auto时候的高度值。于是，一个高度不定的任意元素的展开动画就实现了
+
+👉 [example](https://demo.cssworld.cn/3/3-2.php)
+
+> 但是，使用此方法也有一点要注意，既虽然从适用范围讲，max-height值越大使用场景越多，但是，如果max-height值太大，在收起的时候可能会有“效果延迟”的问题。比方说，展开的元素高度是100px，而max-height是1000px，动画时间是250ms，假设动画函数是线性的，则前255ms我们是看不到收起效果的，因为max-height从1000像素到100像素变化这段时间，元素不会有区域被隐藏，会给人动画延迟225ms的感觉
+
+因此，建议max-height使用足够安全的最小值，这样，收起时即使有延迟效果，也会因为时间很短，很难给用户察觉，并不会影响体验
