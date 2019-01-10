@@ -32,6 +32,9 @@
       - [超越!important](#%E8%B6%85%E8%B6%8Aimportant)
       - [超越最大](#%E8%B6%85%E8%B6%8A%E6%9C%80%E5%A4%A7)
     - [任意高度元素的展开收起动画技术](#%E4%BB%BB%E6%84%8F%E9%AB%98%E5%BA%A6%E5%85%83%E7%B4%A0%E7%9A%84%E5%B1%95%E5%BC%80%E6%94%B6%E8%B5%B7%E5%8A%A8%E7%94%BB%E6%8A%80%E6%9C%AF)
+  - [内联元素](#%E5%86%85%E8%81%94%E5%85%83%E7%B4%A0)
+    - [哪些元素是内联盒子](#%E5%93%AA%E4%BA%9B%E5%85%83%E7%B4%A0%E6%98%AF%E5%86%85%E8%81%94%E7%9B%92%E5%AD%90)
+    - [幽灵空白节点](#%E5%B9%BD%E7%81%B5%E7%A9%BA%E7%99%BD%E8%8A%82%E7%82%B9)
 
 # 【第三章】流、元素与基本尺寸
 HTML标签通常分为块级元素(block-level element)和内联元素(inline element)
@@ -413,7 +416,7 @@ width/height的默认值是auto，而min-width/max-width和min-height/max-height
 
 > 于是，得到结论如下：min-weidht/min-height的初始值是auto，max-width/max-height的初始值是none
 
-max-weidth/max-height的初始值是none而不是auto呢？
+max-weidth/max-height的初始值是none而不是auto呢？
 
 不妨举个简单的例子解释一下，已知父元素宽度400像素，子元素设置宽度800像素，假如说max-width初始值是auto，那自然使用和width一样的解析渲染规则，此时max-width的计算值就应该是父元素的400像素，此时，你就会发现，子元素的800像素直接完蛋了，因为max-width会覆盖width。于是我们的width永远不能设置为比auto计算值更大的宽度值了，这显示是有问题的，这就是为什么max-width初始值是none的原因
 
@@ -421,7 +424,7 @@ width/height的默认值是auto，而min-width/max-width和min-height/max-height
 CSS世界中，min-width/max-width和min-height/max-height属性间，以及与width和height之间有一套相互覆盖的规则。这套规则用一句比较通俗的话概括就是：超越!important，超越最大
 
 #### 超越!important
-**超越!important指的是max-width会覆盖width，而且这种覆盖不是普通的覆盖，是超级覆盖，覆盖到什么程度呢？大家应该都知道CSS世界中的!important的权重相当高，在业界，往往会把!important的权重比成“泰坦尼克号”，比直接在元素的style属性中设置CSS声明还要高。一般用在CSS覆盖javascript设置上。** 但是，就是这么厉害的!important，直接被max-width一个浪头就拍沉了
+**超越!important指的是max-width会覆盖width，而且这种覆盖不是普通的覆盖，是超级覆盖，覆盖到什么程度呢？大家应该都知道CSS世界中的!important的权重相当高，在业界，往往会把!important的权重比成“泰坦尼克号”，比直接在元素的style属性中设置CSS声明还要高。一般用在CSS覆盖javascript设置上。** 但是，就是这么厉害的!important，直接被max-width一个浪头就拍沉了
 
 比方说，针对下面的HTML和CSS设置，图片最后呈现的宽度是多少？
 ```html
@@ -485,3 +488,32 @@ CSS世界中，min-width/max-width和min-height/max-height属性间，以及与w
 > 但是，使用此方法也有一点要注意，既虽然从适用范围讲，max-height值越大使用场景越多，但是，如果max-height值太大，在收起的时候可能会有“效果延迟”的问题。比方说，展开的元素高度是100px，而max-height是1000px，动画时间是250ms，假设动画函数是线性的，则前255ms我们是看不到收起效果的，因为max-height从1000像素到100像素变化这段时间，元素不会有区域被隐藏，会给人动画延迟225ms的感觉
 
 因此，建议max-height使用足够安全的最小值，这样，收起时即使有延迟效果，也会因为时间很短，很难给用户察觉，并不会影响体验
+
+## 内联元素
+
+### 哪些元素是内联盒子
++ 从定义看
+首先要明白这一点：“元素内联”的“内联”特指“外在盒子”，和“display为inline的元素”不是一个概念！inline-block和inline-table都是“内联元素”，因为它们的“外在盒子”都是内联盒子。自然display:inline的元素也是“内联元素”，那么button按钮元素是内联元素，因为其display默认值是inline-block；img图片元素也是内联元素，因为其display默认值inline等
+
++ 从表现看
+就行为表现来看，“内联元素”的典型特征就是可以和文字在一行显示。因此，文字是内联元素，图片是内联元素，按钮是内联元素，输入框、下拉框等原生表单控件也是内联元素
+
+### 幽灵空白节点
+“幽灵空白节点”是内联盒模型中非常重要的一个概念，具体指的是：在HTML5文档中，内联元素的所有解析和渲染表现就如同每个行框盒子的前面有一个“空白节点”一样。这个“空白节点”永远透明，不占据任何宽度，看不见也无法通过脚本获取，就好像幽灵一样，但又确确实实地存在，表现如同文本节点一样，因此，称之为“幽灵空白节点”
+
+> 注意：这里有一个前提，文档声明必须是HTML5文档声明，如果是很多年前的老声明，则不存在“幽灵空白节点”
+
+```html
+<!doctype html>
+<html>
+```
+
+可以举一个例最简单的例子证明“幽灵空白节点”确实存在
+
+👉 [example](./幽灵空白节点/index.html)
+
+![](../media/幽灵空白节点.png)
+
+结果，此div的高度并不是0。这着实很奇怪，内部的span元素的宽度明明都是0，标签之间也没有换行符之类的嫌疑，怎么div的高度会是22像素呢？这与line-height和vertical-align有关
+
+作祟的就是这里的“幽灵空白节点”
