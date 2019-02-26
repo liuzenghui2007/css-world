@@ -58,7 +58,7 @@ HTML标签通常分为块级元素(block-level element)和内联元素(inline el
 
 之所以list-item元素会出现项目符号是因为生成了一个附加的盒子，学名“标记盒子”，专门用来放圆点、数字这些项目符号。
 
-每个元素都有两个盒子，外在盒子和内在盒子。外在盒子负责元素是可以一行显示，还是只能换行显示；内在盒子负责宽高、内容呈现什么的。或则内在盒子叫“容器盒子”
+**每个元素都有两个盒子，外在盒子和内在盒子。外在盒子负责元素是可以一行显示，还是只能换行显示；内在盒子负责宽高、内容呈现什么的。或则内在盒子叫“容器盒子”**
 
 按照display的属性值不同，值为block的元素的盒子实际由外在的“块级盒子”和内在的”块级容器盒子“组成，值为inline-block的元素则由外在的“内联盒子”和内在的“块级容器盒子”组成，值为inline的元素则内外均是“内联盒子”
 
@@ -109,7 +109,7 @@ a元素默认display是inline，所以，设置display:block使其块状化绝�
 
 格式化宽度仅出现在“绝对定位模型”中，也就是出现在position属性值为absolute和fixed的元素中。在默认情况下，绝对定位元素的宽度表现是“包裹性”，宽度由内部尺寸决定，但是，有一种情况其宽度是外部尺寸决定的。
 
-对于非替换元素，当left/right或top/bottom对立方位的属性值同时存在的时候，元素的宽度表现为“格式化宽度”，其宽度大小相对于最近的具有定位特性(position属性值不是static)的祖先元素计算
+**对于非替换元素，当left/right或top/bottom对立方位的属性值同时存在的时候，元素的宽度表现为“格式化宽度”，其宽度大小相对于最近的具有定位特性(position属性值不是static)的祖先元素计算**
 
 👉 [example](./格式化宽度/index.html)
 
@@ -175,7 +175,7 @@ width是作用在“内在盒子”上的，乍一看是一个普通的盒子，
 
 content box写作content-box，padding-box写作padding-box，border box写作border-box，margin box写作...突然发现，margin box居然没有名字！为何唯独margin box并没有对应的css关键字名称呢？因为目前没有任何场景需要用到margin box
 
-"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-size的属性值存在也就没有意义
+"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-sizing的属性值存在也就没有意义
 
 > 在css2.1的规范中，有一段非常露骨的描述：content box环绕着width和height给定的矩形。也就是说width和height默认作用在content box上
 
@@ -313,7 +313,7 @@ html, body {
 
 👉 [example](https://demo.cssworld.cn/3/2-10.php)
 
-要明白其中的原因要先了解浏览器渲染的基本原理。首先，先下载文档内容，加载头部样式资源（如果有的话），然后按照从上而下、自外而内的顺序渲染DOM内容。套用本例就是，先渲染父级元素，后渲染子元素，是有先后顺序大的。因此，当渲染到父元素的时候，子元素的width:100%并没有渲染，宽度就是图片加文字内容的宽度；等渲染到文字这个元素的时候，父元素的宽度已经固定，此时的width:100%就是已经固定好的父元素的宽度。宽度不够怎么办？溢出就好了，overflow属性就是为此而生的
+要明白其中的原因要先了解浏览器渲染的基本原理。首先，先下载文档内容，加载头部样式资源（如果有的话），然后按照从上而下、自外而内的顺序渲染DOM内容。套用本例就是，先渲染父级元素，后渲染子元素，是有先后顺序的。因此，当渲染到父元素的时候，子元素的width:100%并没有渲染，宽度就是图片加文字内容的宽度；等渲染到文字这个元素的时候，父元素的宽度已经固定，此时的width:100%就是已经固定好的父元素的宽度。宽度不够怎么办？溢出就好了，overflow属性就是为此而生的
 
 > **如果包含块的高度没有显式制定（即高度由内容决定），并且该元素不是绝对定位，则计算值为auto。** 一句话总结就是：因为解释成了auto。要知道，auto和百分比计算，肯定是算不了的
 
@@ -386,13 +386,13 @@ width/height的默认值是auto，而min-width/max-width和min-height/max-height
 虽然MDN和W3C维基的文档上都显示min-width/min-height的初始值是0，但是根据分析和测试，**所有浏览器中的min-width/min-height的初值为都是auto**
 
 证据如下：
-+ min-width/height值为auto合法。例如
++ min-width/min-height值为auto合法。例如
 ```html
 <body style="min-width: auto;">
 <!-- 结果所有浏览器下 -->
 <!-- document.body.style.minWidth; // 结果为auto -->
 ```
-> 说明min-*支持auto值，同样，如果是max-width，结果则是''，进一步说明min-width/height值为auto合法
+> 说明min-*支持auto值，同样，如果是max-width，结果则是''，进一步说明min-width/min-height值为auto合法
 + **数值变化无动画**。假设元素的min-width/min-height的初始值是0，那么，当我们设置transition过渡同时改变了min-width/min-height值，岂不是应该有动画效果？结果
 ```css
 .box {
