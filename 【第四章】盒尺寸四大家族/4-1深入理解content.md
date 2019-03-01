@@ -3,6 +3,10 @@
     - [什么是替换元素](#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0)
     - [替换元素的默认display值](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E7%9A%84%E9%BB%98%E8%AE%A4display%E5%80%BC)
     - [替换元素的尺寸计算规则](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E7%9A%84%E5%B0%BA%E5%AF%B8%E8%AE%A1%E7%AE%97%E8%A7%84%E5%88%99)
+    - [替换元素和非替换元素的距离有多远](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E7%9A%84%E8%B7%9D%E7%A6%BB%E6%9C%89%E5%A4%9A%E8%BF%9C)
+      - [替换元素和非替换元素之间只隔了一个src属性](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E4%B9%8B%E9%97%B4%E5%8F%AA%E9%9A%94%E4%BA%86%E4%B8%80%E4%B8%AAsrc%E5%B1%9E%E6%80%A7)
+      - [替换元素和非替换元素之间只隔了一个 CSS content 属性](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E4%B9%8B%E9%97%B4%E5%8F%AA%E9%9A%94%E4%BA%86%E4%B8%80%E4%B8%AA-css-content-%E5%B1%9E%E6%80%A7)
+
 # 深入理解content
 
 ## content与替换元素
@@ -155,7 +159,7 @@ HTML 原生属性改变，这些 HTML 原生属性包括img的 width 和 height 
     此时::before 伪元素呈现的图片的宽高是多少?
 
     很多人会按照经验认为是 200 像素×200 像素，非也!实际上，这里的图片尺寸是 1.jpg
-    这张图片的原始尺寸大小 256 像素×192 像素，width 和 height 属性都被直接无视了。这就 是我上面所说的，在 CSS 世界中，图片资源的固有尺寸是无法改变的
+    这张图片的原始尺寸大小 256 像素×192 像素，width 和 height 属性都被直接无视了。这就是我上面所说的，在 CSS 世界中，图片资源的固有尺寸是无法改变的
 
     👉 [example](https://demo.cssworld.cn/4/1-1.php)
 
@@ -168,3 +172,156 @@ HTML 原生属性改变，这些 HTML 原生属性包括img的 width 和 height 
     在 CSS3 新世界中，img和其他一些替换元素的替换内容的适配方式可以通过 object-fit 属性修改了。例如，img元素的默认声明是 object-fit:fill，如果我们设 置 object-fit:none，则我们图片的尺寸就完全不受控制，表现会和非替换元素::before 生成的图片尺寸类似;如果我们设置 object-fit:contain，则图片会以保持比例图片，尽可能利用 HTML 尺寸但又不会超出的方式显示，有些类似于 background-size:contain 的呈现原理
 
     👉 [example](https://www.zhangxinxu.com/wordpress/2015/03/css3-object-position-object-fit/)
+
+### 替换元素和非替换元素的距离有多远
+图片可以说是最典型最常用的替换元素了，因此，本节依然以图片为代表来深入替换元素的“内心世界”。
+
+#### 替换元素和非替换元素之间只隔了一个src属性
+由于我们平时使用图片肯定都会使用 src 属性，所以难免会思维定式，认为img等同于图片，实际上完全不是的。如果我们把 src 属性去掉，img其实就是一个和span类似的普通的内联标签，也就是成了一个非替换元素。
+
+非常有想法的 Firefox 浏览器很好地证实了这一点。例如，对于以下 CSS 和 HTML 代码，最后图片宽度是多少?
+
+```html
+<style>
+img {
+      display: block;
+      outline: 1px solid;
+}
+</style>
+<img>
+```
+
+按照替换元素的尺寸规则，宽度应该是 0，但实际上，在 Firefox 浏览器下，最终的宽度是 100%自适应父容器的可用宽度的。其表现和普通的span类似，已经完全不是替换元素了。 大家应该都知道，span标签设置 width 和 height 是无效的，所以大家应该明白为何 Firefox 浏览器下img设置 width 和 height 不起作用了吧。
+
+**Firefox 浏览器的案例很好地证明了“如果图片没有替换内容，图片就是一个普通的内联标签”。**
+
+**Chrome 浏览器其实也有类似的表现，只是需要特定的条件触发而已，这个触发条件就是需要有不为空的 alt 属性值。** 例如:
+
+```html
+<img alt="任意值">
+```
+
+此时，Chrome 这个img宽度也是 100%父容器。
+
+但是，如果真是这样，那为何 IE 浏览器没有 src 属性还是完全的替换元素表现呢?原因就在于 IE 浏览器中有个默认的占位替换内容，当 src 属性缺失的时候，会使用这个默认的占位内容，这也是 IE 浏览器下默认img尺寸是 28×30 而不像 Chrome 浏览器那样为 0×0 的原因所在。在高版本的 IE 浏览器下，这个占位的替换内容似乎做了透明处理，但是，在原生的 IE8 浏览器下，这个占位内容却全然暴露了
+
+另外一个可以很好证明“替换元素和非替换元素区别就在于 src 属性”的点是“基于伪元素的图片内容生成技术”。用一句更易懂的话描述就是，我们可以对img元素使用::before 和::after 伪元素进行内容生成以及样式构建，但是这种方法支持是有限制的。首先是兼容性问题，根据我的测试，目前 Chrome 和 Firefox 等浏览器支持，但 IE 浏览器不支持;其次，要想让 Chrome 或 Firefox 等浏览器生效，还有其他一些需要注意的 技术点
+
++ 不能有 src 属性(证明观点的关键所在);
++ 不能使用 content 属性生成图片(针对 Chrome);
++ 需要有 alt 属性并有值(针对 Chrome);
++ **Firefox 下::before 伪元素的 content 值会被无视，::after 无此问题，应该与 Firefox 自己占用了::before 伪元素的 content 属性有关。**
+
+虽然“基于伪元素的图片内容生成技术”并不属于实用技术，但是，实际网页开发的时候， 会有一些场景必须使用img标签，此时，这些隐蔽的技术往往就会有神迹表现。我这里举个小例子抛砖引玉一下，上一小节提到使用缺省 src 的img元素实现滚屏加载效果，但是，就有可能存在这样一个体验问题:如果我们的 JavaScript 加载比较慢，我们的页面就很有可能出现一块一块白色的图片区域，纯白色的，没有任何信息，用户完全不知道这里的内容是什么。 虽然 alt 属性可以提供描述信息，但由于视觉效果不好，被隐藏掉了。此时，我们总不免畅想: 要是在图片还没加载时就把 alt 信息呈现出来该多好啊。
+
+恭喜你可以美梦成真!办法就是使用这里的“基于伪元素的图片内容生成技术”。
+
+👉 [example](https://demo.cssworld.cn/4/1-2.php)
+
+此时，图片 src 没有，因此，::before 和::after 可以生效，我们就可以把 alt 属性值通过 content 属性呈现出来， 核心 CSS 代码如下:
+
+```css
+img::after {
+    /* 黑色alt信息条 */
+    content: attr(alt);
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%;
+    line-height: 30px;
+    background-color: rgba(0,0,0,.5);
+    color: white;
+    font-size: 14px;
+    transform: translateY(100%);
+    /* 来点过渡动画效果 */
+    transition: transform .2s;
+    visibility: visible;
+}
+img:hover::after {
+    transform: translateY(0);
+}
+```
+
+**下面是此技术最有意思的部分。当我们点击按钮给图片添加一个 src 地址时，图片从普通元素变成替换元素，原本都还支持的::before 和::after 此时全部无效，此时再 hover 图 片，是不会有任何信息出现的。于是就非常巧妙地增强了图片还没加载时的信息展示体验。**
+
+#### 替换元素和非替换元素之间只隔了一个 CSS content 属性
+替换元素之所以为替换元素，就是因为其内容可替换，而这个内容就是 margin、border、 padding和content这4个盒子中的content box，对应的CSS属性是content，所以，从理论层面讲，content 属性决定了是替换元素还是非替换元素。
+
+理论太虚，我们还是看一些有趣的真实案例吧。在开始之前，我们需要感谢 Chrome 浏览器，Chrome 浏览器的渲染表现帮助我们更好地理解了替换元素。什么表现呢?就是在 Chrome 浏览器下，所有的元素都支持content 属性，而其他浏览器仅在::before/::after 伪元素中才有支持。因此，下面的所有案例，请在 Chrome、Safari、Opera 等浏览器下查看。
+
+前面已经证明了，没有 src 属性的img是非替换元素，但是，如果我们此时使用 content 属性给它生成一张图片呢?
+
+```html
+<style>
+  img { content: url(1.jpg); }
+</style>
+<img>
+```
+
+结果和下面 HTML 的视觉效果一模一样
+
+```html
+<img src="1.jpg">
+```
+
+👉 [example](https://demo.cssworld.cn/4/1-3.php)
+
+结果图片都正常显示了，且各种表现都符合替换元素，如尺寸规则，或者不支持::before/ ::after 伪元素等。
+
+另外还有一点很有意思，如果图片原来是有 src 地址的，我们也是可以使用 content 属性把图片内容给置换掉的，于是，我们就能轻松实现 hover 图片变成另外一张图片的效果。例如:
+
+```html
+<style>
+img:hover {
+       content: url(laugh-tear.png);
+}
+</style>
+<img src="laugh.png">
+```
+
+👉 [example](https://demo.cssworld.cn/4/1-4.php)
+
+该实例中， 我们鼠标经过笑脸，笑脸会飙出眼泪，就是通过 CSS 的 content 属性直接替换 img的替换内容实现的。要是放在以前，我们只能借助 background-image 或者两个img元素显隐控制实现。
+
+然后，还有一点有必要说明一下，content 属性改变的仅仅是视觉呈现，当我们以右键或 其他形式保存这张图片的时候，所保存的还是原来 src 对应的图片。
+
+**不仅如此，使用 content 属性，我们还可以让普通标签元素变成替换元素。** 举个例子，官网的标志往往都会使用h1标签，里面会有网站名称和标志图片使用背景图，类似下面的代码:
+
+```html
+<h1>《CSS 世界》</h1> 
+<style>
+h1 {
+  width: 180px;
+  height: 36px;
+  background: url(logo.png); /* 隐藏文字 */
+  text-indent: -999px;
+}
+<style>
+```
+
+下面展示一个创新的方法，大家可以在移动端试试。还是一样的 HTML 代码，但是 CSS 代码微调了一下:
+
+```html
+<style>
+h1 {
+  content: url(logo.png);
+}
+</style>
+```
+
+👉 [example](https://demo.cssworld.cn/4/1-5.php)
+
+**我们简单分析一下:传统 CSS 代码的h1是一个普通元素，因此需要设定尺寸隐藏文字; 但是，后面使content 属性实现，h1分分钟就变成了替换元素，文字自动被替换，同时尺寸规则就是替换元素的尺寸规则，完美适应原始图片大小。**
+
+**此外，虽然视觉上文字被替换了，但是屏幕阅读设备阅读的还是文字内容，搜索引擎 SEO 抓取的还是原始的文本信息，因此，对页面的可访问性等没有任何影响。看起来这是一个完美的文字换图显示方案，但还是有一些局限。前文也说到了，替换元素的固有尺寸是无法设置的， 如今在移动端 retina 屏幕几乎是标配，为了图片显示细腻，往往真实图片尺寸是显示图片尺寸的两倍。于是问题就来了，使用 content 生成图片，我们是无法设置图片的尺寸的，只能迫不得已使用一倍图，然后导致图片看上去有点儿模糊**
+
+所以，要想在移动端使用该技术，建议使用 SVG 矢量图片。例如:
+
+```html
+<style>
+h1 {
+  content: url(logo.svg);
+}
+</style>
+```
+
+> 好了，最后和标题再呼应下，替换元素和非替换元素的距离有多远?就是 src 或 content 那一点。
