@@ -6,6 +6,16 @@
     - [替换元素和非替换元素的距离有多远](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E7%9A%84%E8%B7%9D%E7%A6%BB%E6%9C%89%E5%A4%9A%E8%BF%9C)
       - [替换元素和非替换元素之间只隔了一个src属性](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E4%B9%8B%E9%97%B4%E5%8F%AA%E9%9A%94%E4%BA%86%E4%B8%80%E4%B8%AAsrc%E5%B1%9E%E6%80%A7)
       - [替换元素和非替换元素之间只隔了一个 CSS content 属性](#%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%92%8C%E9%9D%9E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E4%B9%8B%E9%97%B4%E5%8F%AA%E9%9A%94%E4%BA%86%E4%B8%80%E4%B8%AA-css-content-%E5%B1%9E%E6%80%A7)
+    - [content 与替换元素关系剖析](#content-%E4%B8%8E%E6%9B%BF%E6%8D%A2%E5%85%83%E7%B4%A0%E5%85%B3%E7%B3%BB%E5%89%96%E6%9E%90)
+  - [content 内容生成技术](#content-%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90%E6%8A%80%E6%9C%AF)
+    - [content 辅助元素生成](#content-%E8%BE%85%E5%8A%A9%E5%85%83%E7%B4%A0%E7%94%9F%E6%88%90)
+    - [content 字符内容生成](#content-%E5%AD%97%E7%AC%A6%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90)
+    - [content 图片生成](#content-%E5%9B%BE%E7%89%87%E7%94%9F%E6%88%90)
+    - [了解 content 开启闭合符号生成](#%E4%BA%86%E8%A7%A3-content-%E5%BC%80%E5%90%AF%E9%97%AD%E5%90%88%E7%AC%A6%E5%8F%B7%E7%94%9F%E6%88%90)
+    - [content attr属性值内容生成](#content-attr%E5%B1%9E%E6%80%A7%E5%80%BC%E5%86%85%E5%AE%B9%E7%94%9F%E6%88%90)
+    - [深入理解 content 计数器](#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-content-%E8%AE%A1%E6%95%B0%E5%99%A8)
+      - [属性 counter-reset](#%E5%B1%9E%E6%80%A7-counter-reset)
+      - [属性 counter-increment](#%E5%B1%9E%E6%80%A7-counter-increment)
 
 # 深入理解content
 
@@ -38,7 +48,7 @@
 ### 替换元素的默认display值
 所有的替换元素都是内联水平元素，也就是替换元素和替换元素、替换元素和文字都是可以在一行显示的。但是，替换元素默认的 display 值却是不一样的
 
-![](../media/替换元素.png)
+![](./media/替换元素.png)
 
 替换元素有很多表现规则和非替换元素不一样，其中之一是宽度和高度的尺寸计算规则，简单描述一下就是，替换元素的 display 是 inline、block 和 inline-block 中的任意一个，其尺寸计算规则都是一样的
 
@@ -300,12 +310,10 @@ h1 {
 
 下面展示一个创新的方法，大家可以在移动端试试。还是一样的 HTML 代码，但是 CSS 代码微调了一下:
 
-```html
-<style>
+```css
 h1 {
   content: url(logo.png);
 }
-</style>
 ```
 
 👉 [example](https://demo.cssworld.cn/4/1-5.php)
@@ -316,12 +324,290 @@ h1 {
 
 所以，要想在移动端使用该技术，建议使用 SVG 矢量图片。例如:
 
-```html
-<style>
+```css
 h1 {
   content: url(logo.svg);
+}
+```
+
+> 好了，最后和标题再呼应下，替换元素和非替换元素的距离有多远?就是 src 或 content 那一点。
+
+### content 与替换元素关系剖析
+从前一节大家一定早就看出 content 属性和替换元素之间有着非常微妙的联系了。实际上，在 CSS 世界中，我们把 content 属性生成的对象称为“匿名替换元素”(anonymous replaced element)。 看到没，直接就“替换元素”叫起来了，可见，它们之间的联系并不是微妙，而是赤裸裸
+
+**content 属性生成的内容都是替换元素?没错，就是替换元素!**
+
+也正是这个原因，content 属性生成的内容和普通元素内容才会有很多不同的特性表现。 我这里举几个简单的例子。
+
++ **我们使用 content 生成的文本是无法选中、无法复制的，好像设置了 user-select:none 声明一般，但是普通元素的文本却可以被轻松选中。同时，content 生成的文本无法被屏幕阅读设备读取，也无法被搜索引擎抓取，因此，千万不要自以为是地把重要的文本信息使用 content 属性生成，因为这对可访问性和 SEO 都很不友好，content 属性只能用来生成一些无关紧要的内容，如装饰性图形或者序号之类;同样，也不要担心原本重要的文字 信息会被 content 替换，替换的仅仅是视觉层。**
+
+  **这里有人可能会反驳:content 内容无法复制也可能是伪元素的原因，而不是替换元素的原 因。要回答这个问题，我们可以将其与同样是替换元素的::first-letter 对比一下。在 IE 和 Firefox 浏览器下，::first-letter 伪元素内容都是可以被选中的，但是::before/::after 内容却无法选中。由此可见，文字无法选中多半是 content 的原因，而非伪元素。**
+
++ 不能左右:empty 伪类。:empty 是一个 CSS 选择器，当元素里面无内容的时候进行 匹配。例如，下面的 HTML 和 CSS 代码:
+  ```html
+    <div>有内容</div>
+    <div></div>
+    <style>
+      div { padding: 10px; border: 10px solid #cd0000; }
+      div:empty { border-style: dashed; }
+    </style>
+  ```
+
+  前面一个div是实线边框，而后面的，因为里面无内容，所以就是虚线边框。
+  接下来，我们使用 content 属性给div生成一些文字，例如:
+  ```css
+      div::after { content: "伪元素生成内容"; }
+  ```
+
+  结果看上去好像div里面出现了文字内容，实际上，还是当成了:empty
+
+  👉 [example](https://demo.cssworld.cn/4/1-6.php)
+
++ content 动态生成值无法获取。content 是一个非常强大的 CSS 属性，其中一个强 大之处就是计数器效果，可以自动累加数值
+
+## content 内容生成技术
+在实际项目中，content属性几乎都是用在::before/::after这两个伪元素中， 因此，“content 内容生成技术”有时候也称为“::before/::after 伪元素技术”。
+
+提前说明一下，因为本书目标浏览器是 IE8 及以上版本浏览器，而 IE8 浏览器仅支持单冒号的伪元素，所以下面内容代码示意部分全部使用单冒号。
+
+### content 辅助元素生成
+此应用的核心点不在于 content 生成的内容，而是伪元素本身。通常，我们会把 content 的属性值设置为空字符串，像这样:
+
+```css
+.element:before {
+      content: '';
+}
+```
+
+只要是空字符串就可以，我曾多次见到有人设置为 content:'.'，这是完全没有必要的。
+
+然后，利用其它 CSS 代码来生成辅助元素，或实现图形效果，或实现特定布局。与使用显式的 HTML 标签元素相比，这样做的好处是 HTML 代码会显得更加干净和精简。
+
+图形效果实现跟着设计走，不具有普适性，这里不介绍。重点说说辅助元素在布局中的应用。其中，最常见的应用之一就是清除浮动带来的影响
+
+```css
+.clear:after {
+  content: '';
+  display: table; /* 也可以是'block' */ clear: both;
+}
+```
+
+**另外一个很具有代表性的应用就是辅助实现“两端对齐”以及“垂直 居中/上边缘/下边缘对齐”效果**
+
+👉 [example](https://demo.cssworld.cn/4/1-7.php)
+
+此实例演示是一 个自动等宽布局且底部对齐的柱状图，默认展示了4项。当我们动态插入更多柱子元素，布局依然智能均分剩余空间，活脱脱一个弹性盒子布局，而且此方法所有浏览器全兼容。
+
+```css
+.box {
+  width: 256px; height: 256px; /* 两端对齐关键 */
+  text-align: justify;
+}
+.box:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+}
+.box:after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+}
+.bar {
+    display: inline-block;
+    width: 20px;
+}
+```
+
+```html
+<div class="box"><i class="bar"></i>
+  <i class="bar"></i>
+  <i class="bar"></i>
+  <i class="bar"></i>
+</div>
+```
+
+**至于实现原理，:before 伪元素用于辅助实现底对齐，:after 伪元素用于辅助实现两端对齐**
+
+这一方法的最大好处是足够兼容，如果想要兼容 IE7 浏览器，直接使用标签元素即可，但这种方法也有不足处，就是 HTML 代码需要注意有些地方不能换行或者空格，有些地方则必须要换行或者有空格，这在多人协作的时候就容易出问题。例如，开发人员喜欢编辑器的 HTML 格式化功能，然后标签自动换行，于是样式就会出现偏差，所以，一定记得在 HTML 代码中写上明确的注释— “这里千万不能换行”，或者类似这种。
+
+### content 字符内容生成
+content 字符内容生成就是直接写入字符内容，中英文都可以，比较常见的应用就是配合 @font-face 规则实现图标字体效果。
+```html
+<style>
+@font-face {
+font-family: "myico";
+src: url("/fonts/4/myico.eot");
+src: url("/fonts/4/myico.eot#iefix") format("embedded-opentype"),
+        url("/fonts/4/myico.ttf") format("truetype"),
+        url("/fonts/4/myico.woff") format("woff");
+}
+.icon-home:before { 
+  font-size: 64px; font-family: myico; content: "家";
+}
+</style>
+<span class="icon-home"></span>
+```
+
+此时，页面显示的可能就不是一个“家”字，而是一个图标
+
+👉 [example](https://demo.cssworld.cn/4/1-8.php)
+
+另外一个值得介绍的点就是，除常规字符之外，我们还可以插入 Unicode 字符，比较经典
+的就是插入换行符来实现某些布局或者效果
+```css
+:after {
+  content: '\A';
+  white-space: pre;
+}
+```
+
+很多人可能会问:这个'\A'是什么?'\A'其实指的是换行符中的 LF 字符，其 Unicode 编码是 000A，在 CSS 的 content 属性中则直接写作'\A';换行符除了 LF 字符还有 CR 字符， 其 Unicode 编码是 000D，在 CSS 的 content 属性中则直接写作'\D'。CR 字符和 LF 字符分 别指回车(CR)和换行(LF)，content 字符生成强大之处就在于不仅普通字符随便插，Unicode 字符也不在话下。
+
+那它具体有什么作用呢?很显然，作用就是换行。那换行又有什么用呢?确实，很多时候，换行效果看上去没什么特别之处，我在 HTML 中弄个br标签不是照样有一样的效果?但是 content 字符生成在某些场景下真的可以大放异彩，我们不妨看下面这个配合 CSS3 animation 用来实现字符动画效果的例子。
+
+我们动态加载页面内容的时候，经常会使用“正在加载中...”这几个字，基本上，后面的 3 个点都是静态的。静态的问题在于，如果网络不流畅，加载时间比较长，就会给人有假死的 感觉，但是，如果是点点点这种横向的动画效果，用户就会耐心很多，体验也会好很多，用户流失率就会有所下降。没错，我们可以利用这里的'\A'换行特性让“...”这几个字符动起来，
+```html
+正在加载中<dot>...</dot> 
+<style>
+dot {
+    display: inline-block;
+    height: 1em;
+    line-height: 1;
+    text-align: left;
+    vertical-align: -.25em;
+    overflow: hidden;
+}
+dot::before {
+    display: block;
+    content: '...\A..\A.';
+      white-space: pre-wrap;
+    animation: dot 3s infinite step-start both;
+}
+@keyframes dot {
+    33% { transform: translateY(-2em); }
+    66% { transform: translateY(-1em); }
 }
 </style>
 ```
 
-> 好了，最后和标题再呼应下，替换元素和非替换元素的距离有多远?就是 src 或 content 那一点。
+效果即达成，IE6 至 IE9 浏览器下是静态的点点点，支持 animation 动画的浏览器下全部都是打点 loading 动画效果，颜色大小可控，使用非常方便。
+
+
+动画实现的原理不难理解，插入 3 行内容，分别是 3 个点、2 个点和 1 个点，然后通过 transform 控制垂直位置，依次展示每一行的内容。
+
+### content 图片生成
+content 图片生成指的是直接用 url 功能符显示图片
+```css
+div:before {
+  content: url(1.jpg);
+}
+```
+
+url 功能符中的图片地址不仅可以是常见的 png、jpg 格式，还可以是 ico 图片、svg 文件以及 base64URL 地址，但不支持 CSS3 渐变背景图。
+
+虽然支持的图片格式多种多样，但是实际项目中，content 图片生成用得并不多，主要原因在于图片的尺寸不好控制，我们设置宽高无法改变图片的固有尺寸。所以，伪元素中的图片更多的是使用 background-image 模拟，类似这样:
+```css
+div:before {
+  content: '';
+  background: url(1.jpg);
+}
+```
+
+在我看来 content 图片生成技术的实用性，还不如上一节提到的直接使用 content 属性替换文字为图片的技术，除非这个生成的图片是 base64URL 地址。因为 content 图片和img图片的加载表现是一样的，如果没有尺寸限制，都是尺寸为0，然后忽然图片尺寸一下子出现， 所导致的问题就是页面加载的时候会晃动，影响体验。为了避免这个问题，我们只能限制容器尺寸，那么，既然限制了容器尺寸，为何不使用 background-image 呢?显然更好控制啊? 所以，只有不需要控制尺寸的图片才有使用优势。
+
+base64 图片由于内联在 CSS 文件中，因此直接出现，没有尺寸为 0 的状态，同时无须额外设置 display 属性值为块状，CSS 代码更省。如果还没理解我说的，可以看一个对比例子，就明白什么意思了。
+
+👉 [example](https://demo.cssworld.cn/4/1-10.php)
+
+### 了解 content 开启闭合符号生成
+
+### content attr属性值内容生成
+此功能比较常用，我个人用得就比较多，比方说前面一节替换元素那里利用 alt 属性显示
+图片描述信息的例子:
+
+```css
+img::after {
+/* 生成alt信息 */ 
+content: attr(alt); 
+/* 其他CSS略 */
+}
+```
+
+除了原生的 HTML 属性，自定义的 HTML 属性也是可以生产的，例如:
+```css
+.icon:before {
+  content: attr(data-title);
+}
+```
+
+**需要注意的是，attr 功能符中的属性值名称千万不要自以为是地在外面加个引号。不能有引号，否则浏览器会认 为是无效的声明**
+
+### 深入理解 content 计数器
+计数器效果可以说是 content 部分的重中之重，因为此功能非常强大、实用，且不具有可替代性，甚至可以实现连 JavaScript 都不好实现的效果。但同样，content 计数器具有一定的深度，大家可以适当放慢节奏。
+
+所谓 CSS 计数器效果，指的是使用 CSS 代码实现随着元素数目增多，数值也跟着变大的效果。举个例子，我曾经在业余时间给同事做过一个点果汁的小系统，由于果汁店经常会有水果因“果品”爆发被竞相购买而缺货的情况，因此，每人可以选择 3 种自由搭配的饮品，以免无货的尴尬。于是，就有了第 1 选择、第 2 选择和第 3 选择
+
+![4-23](media/4-23.png)
+
+图中的灰色小字中的 1、2、3 就是使用 CSS 计数器生成的，这个可以说是最最基本、 最最简单的计数器应用了。实际上，计数器能够实现的效果非常强大。但是，万丈高楼平地起，在介绍高级应用之前，我们一定要先牢牢掌握与计数器相关的基础知识。
+
+CSS 计数就跟我们军训报数一样。其中有这么几个关键点。
++ 班级命名:有个称呼，如生信 4 班，就知道谁是谁了。
++ 报数规则:1、2、3、4 递增报数，还是 1、2、1、2 报数，让班级的人知道。
++ 开始报数:不发口令，大眼瞪小眼，会乱了秩序。
+
+巧的是，以上3个关键点正好对应CSS计数器的两个属性(counter-reset和counter-increment)和一个方法(counter()/counters())，下面依次讲解。
+
+#### 属性 counter-reset
+顾名思义，就是“计数器-重置”的意思。其实就是“班级命名”，主要作用就是给计数器起个名字。如果可能，顺便告诉下从哪个数字开始计数。默认是 0， 注意，默认是 0 而不是 1。可能有人会疑惑，网上的各种例子默认显示的第 1 个数字不都是 1 吗?那是因为受了 counter-increment 普照的影响，后面会详细讲解。
+
+```css
+/* 计数器名称是'wangxiaoer', 并且默认起始值是 2 */
+.xxx { counter-reset: wangxiaoer 2; }
+```
+
+👉 [example](https://demo.cssworld.cn/4/1-11.php)
+
+counter-reset 的计数重置可以是负数，如-2，也可以写成小数，如 2.99，不过，IE 和 Firefox 对此都不识别，认为是不合法数值，直接无视，当作默认值 0 来处理;Chrome 不嫌贫嫉富，任何小数都是向下取整，如 2.99 当成 2 处理，于是王小二还是那个王小二。
+
+到此为止?当然不是!counter-reset 还有一手，就是多个计数器同时命名。例如，王小二和王小三同时登台:
+
+```css
+ .xxx { counter-reset: wangxiaoer 2 wangxiaosan 3; }
+```
+
+直接空格分隔，而不是使用逗号分隔。
+
+👉 [example](https://demo.cssworld.cn/4/1-12.php)
+
+另外，counter-reset 还可以设置为 none 和 inherit。取消重置以及继承重置。这里 就不展开了。
+
+#### 属性 counter-increment
+顾名思义，就是“计数器递增”的意思。值为 counter-reset 的 1 个或多个关键字，后面可以跟随数字，表示每次计数的变化值。如果省略，则使用 默认变化值 1(方便起见，下面都使用默认值做说明)。
+
+CSS 的计数器的计数是有一套规则的，我将之形象地称为“普照规则”。具体来讲就是:普照源(counter-reset)唯一，每普照(counter-increment)一次，普照源增加一次计数值。
+
+于是，我们就可以解释上面提到的“默认值是 0”的问题了。通常 CSS 计数器应用的时候，我们都会使用 counter-increment，肯定要用这个，否则怎么递增呢!而且一般都是一次普 照，正好加 1，于是，第一个计数的值就是 1(0+1=1)!
+
+👉 [example](https://demo.cssworld.cn/4/1-13.php)
+
+这里 counter-increment 普照了p标签，counter-reset 值增加，默认递增 1，于是计数从设置的初始值 2 变成了 3，wangxiaoer 就是这里的计数器，自然伪元素 content 值 counter(wangxiaoer)就是 3。
+
+当然，它也可以普照自身，也就是 counter-increment 直接设置在伪元素上:
+
+```css
+.counter {
+  counter-reset: wangxiaoer 2;
+}
+.counter:before {
+  content: counter(wangxiaoer);
+  counter-increment: wangxiaoer;
+}
+```
+
+依然是 1 次普照，依旧全局的计数器加 1，所以显示的数值还是 3，和上面的例子一样。 趁热打铁，如果父元素和子元素都被 counter-increment 普照 1 次，结果会如何呢? 很简单，父元素 1 次普照，子元素 1 次普照，共 2 次普照，counter-reset 设置的计数器值增加 2 次，计数起始值是 2，于是现实的数字就是 4 啦!
+
+👉 [example](https://demo.cssworld.cn/4/1-14.php)
+
+**总而言之，无论位置在何处，只要有 counter-increment，对应的计数器的值就会变化， counter()只是输出而已!**

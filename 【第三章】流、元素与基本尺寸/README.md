@@ -167,7 +167,7 @@ a元素默认display是inline，所以，设置display:block使其块状化绝�
 
 width是作用在“内在盒子”上的，乍一看是一个普通的盒子，实际上，这个“内在盒子”是由很多部分构成的
 
-![box-dimension](../media/box-dimension.png)
+![box-dimension](./media/box-dimension.png)
 
 引用一张chrome的盒子模型图
 
@@ -512,7 +512,7 @@ CSS世界中，min-width/max-width和min-height/max-height属性间，以及与w
 
 👉 [example](./幽灵空白节点/index.html)
 
-![](../media/幽灵空白节点.png)
+![](./media/幽灵空白节点.png)
 
 结果，此div的高度并不是0。这着实很奇怪，内部的span元素的宽度明明都是0，标签之间也没有换行符之类的嫌疑，怎么div的高度会是22像素呢？这与line-height和vertical-align有关
 
