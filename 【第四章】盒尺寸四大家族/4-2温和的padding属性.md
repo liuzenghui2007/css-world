@@ -1,6 +1,8 @@
 - [温和的 padding 属性](#%E6%B8%A9%E5%92%8C%E7%9A%84-padding-%E5%B1%9E%E6%80%A7)
   - [padding 与元素的尺寸](#padding-%E4%B8%8E%E5%85%83%E7%B4%A0%E7%9A%84%E5%B0%BA%E5%AF%B8)
   - [padding 的百分比值](#padding-%E7%9A%84%E7%99%BE%E5%88%86%E6%AF%94%E5%80%BC)
+  - [标签元素内置的 padding](#%E6%A0%87%E7%AD%BE%E5%85%83%E7%B4%A0%E5%86%85%E7%BD%AE%E7%9A%84-padding)
+  - [padding 与图形绘制](#padding-%E4%B8%8E%E5%9B%BE%E5%BD%A2%E7%BB%98%E5%88%B6)
 
 # 温和的 padding 属性
 盒尺寸四大家族元素中，padding 的性格是最温和的。所谓“温和”指的是我们在使用 padding 进行页面开发的时候很少会出现意想不到的情况，这种感觉就好比和一个几乎不会发脾气的人相处。
@@ -8,7 +10,8 @@
 padding 指盒子的内补间。“补间”这个词比较术语化，我们不妨将其理解为快递盒子内快递商品外包裹的那层起保护作用的海绵。只是在 CSS 中，这个“海绵”默认是透明的。在现实世界中，海绵不会影响盒子的尺寸，但在 CSS 世界中，尺寸规则就有所不同了。
 
 ## padding 与元素的尺寸
-因为 CSS 中默认的 box-sizing 是 content-box，所以使用 padding 会增加元素的尺寸。例如:
+**因为 CSS 中默认的 box-sizing 是 content-box，所以使用 padding 会增加元素的尺寸。** 例如:
+
 ```css
 .box {
     width: 80px;
@@ -214,3 +217,114 @@ span {
 ```
 
 **此时，“幽灵空白节点”高度变成了 0，高和宽就会一样，和块状元素一样的正方形就出现了。**
+
+## 标签元素内置的 padding
+说一下你可能不知道的关于 padding 的一些小秘密。
+
++ ol/ul 列表内置 padding-left，但是单位是 px 不是 em。例如，Chrome 浏览器下是 40px，由于使用的是 px 这个绝对单位，因此，如果列表中的 font-size 大小很小，则li元素的项目符号(如点或数字)就会ul/ol元素的左边缘距离很开，如果font-size 比较大，则项目符号可能跑到ul/ol元素的外面
+    
+    根据我自己的经验，当 font-size 是 12px 至 14px 时，22px 是比较好的一个 padding- left 设定值，所有浏览器都能正常显示，且非常贴近边缘。
+
+    ```css
+        ol, ul {
+            padding-left: 22px;
+        }
+    ```
+    当然，如果视觉要求比较高，使用 content 计数器模拟则是更好的选择
+
++ 很多表单元素都内置 padding，例如:
+  + 所有浏览器input/textarea输入框内置 padding;
+  + 所有浏览器button按钮内置 padding;
+  + 部分浏览器select下拉内置 padding，如 Firefox、IE8 及以上版本浏览器可以设置 padding;
+  + 所有浏览器radio/chexkbox单复选框无内置 padding;
+  + button按钮元素的 padding 最难控制!
+
+    我们着重看一下button按钮元素的 padding。在 Chrome 浏览器下，我们设置:
+    ```css
+    button { padding: 0; }
+    ```
+
+    **按钮的 padding 就变成了 0，但是在 Firefox 浏览器下，左右依然有 padding**，如图 4-44 所
+    示。可以试试使用:
+    
+    ```css
+    button::-moz-focus-inner { padding: 0; }
+    ```
+
+    此时按钮就会如图 4-45 所示。
+
+    ![4-44](media/4-44.png)
+
+    而在 IE7 浏览器下，文字如果变多，那么左右 padding 逐渐变大，如图 4-46 所示。需要进行如下设置
+
+    ```css
+    button { overflow: visible; }
+    ```
+
+    最后，按钮 padding 与高度计算不同浏览器下千差万别，例如:
+
+    ```css
+    button {
+        line-height: 20px;
+        padding: 10px;
+        border: none;
+    }
+    ```
+
+    **结果，在 Chrome 浏览器下是预期的 40 像素，然而 Firefox 浏览器下是莫名其妙的 42 像素，在IE7 浏览器下更是匪夷所思的 45 像素，这使我们平常制作网页的时候很少使用原生的 button按钮作为点击按钮，而是使用a标签来模拟。但是，在表单中，有时候按钮是自带交互行为的，这是a标签无法模拟的。我这里给大家推荐一个既语义良好行为保留，同时 UI 效果棒兼容效果好的实现小技巧，那就是使用label元素，HTML 和 CSS 如下:**
+
+    ```html
+    <style>
+    button {
+      position: absolute;
+      clip: rect(0 0 0 0);
+    }
+    label {
+        display: inline-block;
+        line-height: 20px;
+        padding: 10px;
+    }
+    </style>
+    <button id="btn"></button>
+    <label for="btn">按钮</label>
+    ```
+
+    label元素的 for 属性值和button元素的 id 值对应即可。此时，所有浏览器下的按钮高度都是 40 像素，而且button元素的行为也都保留了，是非常不错的实践技巧。
+
+## padding 与图形绘制
+padding 属性和 background-clip 属性配合，可以在有限的标签下实现一些 CSS 图形绘制效果，我这里抛砖引玉，举两个小例子，重在展示可行性。
+
++ 不使用伪元素，仅一层标签实现大队长的“三道杠”分类图标效果。此效果在移动端比较常见，类似于图 4-48 最右边的小图标。
+    ![4-48](media/4-48.png)
+
+    我们可以使用类似下面的 CSS 代码(10 倍大小模拟)实现
+    ```css
+    .icon-menu {
+       display: inline-block;
+       width: 140px; height: 10px;
+       padding: 35px 0;
+       border-top: 10px solid;
+       border-bottom: 10px solid;
+       background-color: currentColor;
+       background-clip: content-box;
+    }
+    ```
+
++ 不使用伪元素，仅一层标签实现双层圆点效果。此效果在移动端也比较常见，类似于图 4-49，在多个广告图片切换时，用 来标识当前显示的是哪张图。
+    ![](media/4-49.png)
+
+    我们可以使用类似下面的 CSS 代码(10 倍大小模拟)实现
+
+    ```css
+    .icon-dot {
+        display: inline-block;
+        width: 100px; height: 100px;
+        padding: 10px;
+        border: 10px solid;
+        border-radius: 50%;
+        background-color: currentColor;
+        background-clip: content-box;
+    }
+    ```
+
+👉 [example](https://demo.cssworld.cn/4/2-4.php)
