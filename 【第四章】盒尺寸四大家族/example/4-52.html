@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ul {
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .container {
+            width: 340px;
+        }
+        
+        .grid {
+            margin-right: -20px;
+        }
+
+        .container li {
+            width: 100px;
+            height: 100px;
+            float: left;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            background: #abcdef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="grid clearfix">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+</html>

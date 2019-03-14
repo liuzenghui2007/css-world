@@ -179,7 +179,7 @@ HTML 原生属性改变，这些 HTML 原生属性包括img的 width 和 height 
 
     **我就不卖关子了，那是因为图片中的 content 替换内容默认的适配方式是填充(fill)，也就是外部设定的尺寸多大，我就填满、跟着一样大。换句话说，尺寸变化的本质并不是改变固有尺寸，而是采用了填充作为适配 HTML 尺寸和 CSS 尺寸的方式，且在 CSS3 之前，此适配方式是不能修改的**
 
-    在 CSS3 新世界中，img和其他一些替换元素的替换内容的适配方式可以通过 object-fit 属性修改了。例如，img元素的默认声明是 object-fit:fill，如果我们设 置 object-fit:none，则我们图片的尺寸就完全不受控制，表现会和非替换元素::before 生成的图片尺寸类似;如果我们设置 object-fit:contain，则图片会以保持比例图片，尽可能利用 HTML 尺寸但又不会超出的方式显示，有些类似于 background-size:contain 的呈现原理
+    在 CSS3 新世界中，img和其他一些替换元素的替换内容的适配方式可以通过 object-fit 属性修改了。例如，img元素的默认声明是 object-fit:fill，如果我们设置 object-fit:none，则我们图片的尺寸就完全不受控制，表现会和非替换元素::before 生成的图片尺寸类似;如果我们设置 object-fit:contain，则图片会以保持比例图片，尽可能利用 HTML 尺寸但又不会超出的方式显示，有些类似于 background-size:contain 的呈现原理
 
     👉 [example](https://www.zhangxinxu.com/wordpress/2015/03/css3-object-position-object-fit/)
 

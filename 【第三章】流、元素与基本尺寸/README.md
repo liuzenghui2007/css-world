@@ -60,7 +60,7 @@ HTML标签通常分为块级元素(block-level element)和内联元素(inline el
 
 **每个元素都有两个盒子，外在盒子和内在盒子。外在盒子负责元素是可以一行显示，还是只能换行显示；内在盒子负责宽高、内容呈现什么的。或则内在盒子叫“容器盒子”**
 
-按照display的属性值不同，值为block的元素的盒子实际由外在的“块级盒子”和内在的”块级容器盒子“组成，值为inline-block的元素则由外在的“内联盒子”和内在的“块级容器盒子”组成，值为inline的元素则内外均是“内联盒子”
+**按照display的属性值不同，值为block的元素的盒子实际由外在的“块级盒子”和内在的”块级容器盒子“组成，值为inline-block的元素则由外在的“内联盒子”和内在的“块级容器盒子”组成，值为inline的元素则内外均是“内联盒子”**
 
 明白为何display属性值是inline-block的元素既能和图文一行显示，又能直接设置width/height。因为有两个盒子，外面的盒子是inline级别，里面的盒子是block级别
 
@@ -72,10 +72,10 @@ HTML标签通常分为块级元素(block-level element)和内联元素(inline el
 ### 深藏不露的width:auto
 width的默认值是auto。auto因为是默认值，所以出镜率不高，但是，它却是个深藏不露的家伙，它至少包含了以下四种不同的宽度表现
 
-+ 1.充分利用可用空间。比方说div，p这些元素的宽度默认是100%于父级容器的
-+ 2.收缩与包裹。典型代表就是浮动、绝对定位、inline-block元素或table元素。css3中的fit-content指的就是这种宽度表现
-+ 3.收缩到最小。这个容易出现在table-layout为auto的表格中
-+ 4.超出容器限制。除非有明确的width相关设置，否则上面3种情况尺寸都不会主动超过父级容器宽度，但是存在一些特殊情况。例如设置white-space: nowrap
++ 1.**充分利用可用空间**。比方说div，p这些元素的宽度默认是100%于父级容器的
++ 2.**收缩与包裹**。典型代表就是浮动、绝对定位、inline-block元素或table元素。css3中的fit-content指的就是这种宽度表现
++ 3.**收缩到最小**。这个容易出现在table-layout为auto的表格中
++ 4.**超出容器限制**。除非有明确的width相关设置，否则上面3种情况尺寸都不会主动超过父级容器宽度，但是存在一些特殊情况。例如设置white-space: nowrap
 
 > 在css世界中，盒子分“内在盒子”和“外在盒子”，显示也分“内部显示”和“外部显示”，同样尺寸也分“内部尺寸”和“外部尺寸”。其中“内部尺寸”由内部元素决定，“外部尺寸”宽度由外部元素决定
 
@@ -175,7 +175,7 @@ width是作用在“内在盒子”上的，乍一看是一个普通的盒子，
 
 content box写作content-box，padding-box写作padding-box，border box写作border-box，margin box写作...突然发现，margin box居然没有名字！为何唯独margin box并没有对应的css关键字名称呢？因为目前没有任何场景需要用到margin box
 
-"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-sizing的属性值存在也就没有意义
+**"margin的背景永远是透明的"，因此不可能作为background-clip或background-origin属性出现。margin一旦设定具体宽度和高度值，其本身的尺寸是不会因margin值变化而变化的，因此作为box-sizing的属性值存在也就没有意义**
 
 > 在css2.1的规范中，有一段非常露骨的描述：content box环绕着width和height给定的矩形。也就是说width和height默认作用在content box上
 
@@ -285,7 +285,7 @@ height:auto要比width:auto简单而单纯得多。原因在于，css的默认�
 此外，height:auto也有外部尺寸特性。其仅存在于绝对定位模型中，也就是“格式化高度”与“格式化宽度”
 
 ### 关于height:100%
-height和width还有一个比较明显的区别就是对百分比单位的支持。对于width属性，就算父元素width为auto，其百分比也是支持的；但是，**对于height属性，如果父元素height为auto，只要子元素在文档流中，其百分比值完全就被忽略了。**
+**height和width还有一个比较明显的区别就是对百分比单位的支持。对于width属性，就算父元素width为auto，其百分比也是支持的；但是，对于height属性，如果父元素height为auto，只要子元素在文档流中，其百分比值完全就被忽略了。**
 
 ```css
 div {
@@ -340,7 +340,7 @@ div {
 }
 ```
 
-此时的height:100%就会有计算值，即使祖先元素的height计算能力为auto也是如此。需要注意的是，绝对定位元素的百分比计算和非绝对定位的百分比计算是有区别的，区别在于绝对定位的宽高百分比计算是相对与padding box的，也就是说会把padding大小的值计算在内，但是，非绝对定位元素则是相对于content box计算的
+**此时的height:100%就会有计算值，即使祖先元素的height计算能力为auto也是如此。需要注意的是，绝对定位元素的百分比计算和非绝对定位的百分比计算是有区别的，区别在于绝对定位的宽高百分比计算是相对与padding box的，也就是说会把padding大小的值计算在内，但是，非绝对定位元素则是相对于content box计算的**
 
 👉 [example](https://demo.cssworld.cn/3/2-11.php)
 
@@ -353,7 +353,7 @@ div {
 只要在图片上覆盖两个绝对定位，同时设height:100%，则无论图片多高，我们的左右半区都能自动和图片高度一模一样，无须任何使用javascript计算
 
 ## CSS min-width/max-width和min-height/max-height二三事
-说完了width和height，下面轮到min-widht/max-width和min-height/max-height了，它们有很多共性。比方说，它们都是与尺寸相关的，盒尺寸机制和一些值的渲染规则也是一样的。
+说完了width和height，下面轮到min-width/max-width和min-height/max-height了，它们有很多共性。比方说，它们都是与尺寸相关的，盒尺寸机制和一些值的渲染规则也是一样的。
 
 ### 为流体而生的min-width/max-width
 在css世界中，min-width/max-width出现的场景一定是自适应布局或者流体布局中。因为，如果是那种width/height定死的砖头布局，min-width/max-width就没有任何出现的价值，因为它们是具有边界行为的属性，所以没有变化自然无法触发，也就没有使用价值
