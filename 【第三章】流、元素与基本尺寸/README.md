@@ -54,7 +54,7 @@ HTML标签通常分为块级元素(block-level element)和内联元素(inline el
 > 实际开发时，一般使用table，并不会使用list-item，因为1.list-item的字符比较多；2.会出现不需要的项目符号；3.IE浏览器不支持伪元素的值为list-item
 
 ### 为什么list-item元素会出现项目符号
-盒子分为：块级盒子(block-level box)和内联盒子(inline box)。块级盒子就负责结构，内联盒子就负责内容。
+**盒子分为：块级盒子(block-level box)和内联盒子(inline box)。块级盒子就负责结构，内联盒子就负责内容。**
 
 之所以list-item元素会出现项目符号是因为生成了一个附加的盒子，学名“标记盒子”，专门用来放圆点、数字这些项目符号。
 
