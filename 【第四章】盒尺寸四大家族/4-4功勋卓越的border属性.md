@@ -1,3 +1,20 @@
+- [功勋卓越的 border 属性](#%E5%8A%9F%E5%8B%8B%E5%8D%93%E8%B6%8A%E7%9A%84-border-%E5%B1%9E%E6%80%A7)
+  - [为什么 border-width 不支持百分比值](#%E4%B8%BA%E4%BB%80%E4%B9%88-border-width-%E4%B8%8D%E6%94%AF%E6%8C%81%E7%99%BE%E5%88%86%E6%AF%94%E5%80%BC)
+  - [了解各种 border-style 类型](#%E4%BA%86%E8%A7%A3%E5%90%84%E7%A7%8D-border-style-%E7%B1%BB%E5%9E%8B)
+    - [border-style:none](#border-stylenone)
+    - [border-style:solid](#border-stylesolid)
+    - [border-style:dashed](#border-styledashed)
+    - [border-style:dotted](#border-styledotted)
+    - [border-style:double](#border-styledouble)
+    - [其他 border-style 类型](#%E5%85%B6%E4%BB%96-border-style-%E7%B1%BB%E5%9E%8B)
+  - [border-color 和 color](#border-color-%E5%92%8C-color)
+  - [border 与透明边框技巧](#border-%E4%B8%8E%E9%80%8F%E6%98%8E%E8%BE%B9%E6%A1%86%E6%8A%80%E5%B7%A7)
+    - [右下方 background 定位的技巧](#%E5%8F%B3%E4%B8%8B%E6%96%B9-background-%E5%AE%9A%E4%BD%8D%E7%9A%84%E6%8A%80%E5%B7%A7)
+    - [优雅地增加点击区域大小](#%E4%BC%98%E9%9B%85%E5%9C%B0%E5%A2%9E%E5%8A%A0%E7%82%B9%E5%87%BB%E5%8C%BA%E5%9F%9F%E5%A4%A7%E5%B0%8F)
+    - [三角等图形绘制](#%E4%B8%89%E8%A7%92%E7%AD%89%E5%9B%BE%E5%BD%A2%E7%BB%98%E5%88%B6)
+  - [border 与图形构建](#border-%E4%B8%8E%E5%9B%BE%E5%BD%A2%E6%9E%84%E5%BB%BA)
+  - [border 等高布局技术](#border-%E7%AD%89%E9%AB%98%E5%B8%83%E5%B1%80%E6%8A%80%E6%9C%AF)
+
 # 功勋卓越的 border 属性
 顾名思义，border 就是“边框”，从名字就可以看出来 CSS 设计者设计此属性的目的就是给元素弄个边框什么的。但是，CSS 世界中很多大受欢迎的属性之所以受欢迎，并不是因为其本职工作做得很好，而是衍生出来的特性可以用来解决很多棘手的问题。border 属性就是 典型代表之一。我总是称赞 border“功勋卓越”，正是因为 border 属性在图形构建、体验优化以及网页布局这块几大放异彩，同时保证其良好的兼容性和稳定的特性表现才得此荣耀的，如果就老老实实画个框框，就不可能称赞它“功勋卓越”。
 
@@ -132,7 +149,7 @@ inset(内凹)、outset(外凸)、groove(沟槽)、ridge (山脊)风格老土过�
 .add:before {
     border-top: 10px solid;
 }
-    .add:after {
+.add:after {
     border-left: 10px solid;
 }
 /* hover变色*/ 
@@ -149,7 +166,7 @@ inset(内凹)、outset(外凸)、groove(沟槽)、ridge (山脊)风格老土过�
 虽然 color:transparent 在 IE9 以上版本的浏览器才支持，但是 border-color: transparent 在 IE7 浏览器就开始支持了，于是，我们解决一些棘手问题的思路就更加开阔了。
 
 ### 右下方 background 定位的技巧
-在 CSS3 新世界还没到来的时候，background 定位有一个比较大的局限性，就是只能相 对左上角数值定位，不能相对右下角。这种特性有时候会给我们的工作带来一点儿麻烦。举个 例子，假设现在有一个宽度不固定的元素，我们需要在距离右边缘 50 像素的位置设置一个背景 图片，此时 background 属性就遭遇尴尬了:由于宽度不固定，所以无法通过设定具体数值来 实现我们想要的效果，因为 background 是相对左上角定位的，我们的需求是右侧定位。
+在 CSS3 新世界还没到来的时候，background 定位有一个比较大的局限性，就是只能相对左上角数值定位，不能相对右下角。这种特性有时候会给我们的工作带来一点儿麻烦。举个例子，假设现在有一个宽度不固定的元素，我们需要在距离右边缘 50 像素的位置设置一个背景图片，此时 background 属性就遭遇尴尬了:由于宽度不固定，所以无法通过设定具体数值来实现我们想要的效果，因为 background 是相对左上角定位的，我们的需求是右侧定位。
 
 要实现上面的需求，方法挺多。其中一种方法就是使用透明边框，如下 CSS 代码:
 
