@@ -1,3 +1,16 @@
+- [line-height 的好朋友 vertical-align](#line-height-%E7%9A%84%E5%A5%BD%E6%9C%8B%E5%8F%8B-vertical-align)
+  - [vertical-align 家族基本认识](#vertical-align-%E5%AE%B6%E6%97%8F%E5%9F%BA%E6%9C%AC%E8%AE%A4%E8%AF%86)
+  - [vertical-align 作用的前提](#vertical-align-%E4%BD%9C%E7%94%A8%E7%9A%84%E5%89%8D%E6%8F%90)
+  - [vertical-align 和 line-height 之间的关系](#vertical-align-%E5%92%8C-line-height-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB)
+  - [深入理解 vertical-align 线性类属性值](#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-vertical-align-%E7%BA%BF%E6%80%A7%E7%B1%BB%E5%B1%9E%E6%80%A7%E5%80%BC)
+    - [inline-block 与 baseline](#inline-block-%E4%B8%8E-baseline)
+    - [了解 vertial-align:top/bottom](#%E4%BA%86%E8%A7%A3-vertial-aligntopbottom)
+    - [vertial-align:middle 与近似垂直居中](#vertial-alignmiddle-%E4%B8%8E%E8%BF%91%E4%BC%BC%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD)
+  - [深入理解 vertical-align 文本类属性值](#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-vertical-align-%E6%96%87%E6%9C%AC%E7%B1%BB%E5%B1%9E%E6%80%A7%E5%80%BC)
+  - [简单了解 vertical-align 上标下标类属性值](#%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3-vertical-align-%E4%B8%8A%E6%A0%87%E4%B8%8B%E6%A0%87%E7%B1%BB%E5%B1%9E%E6%80%A7%E5%80%BC)
+  - [无处不在的 vertical-align](#%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84-vertical-align)
+  - [基于 vertical-align 属性的水平垂直居中弹框](#%E5%9F%BA%E4%BA%8E-vertical-align-%E5%B1%9E%E6%80%A7%E7%9A%84%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%E5%BC%B9%E6%A1%86)
+
 # line-height 的好朋友 vertical-align
 终于轮到 line-height 的好朋友 vertical-align 上场了，为什么说它们是好朋友呢?因为凡是 line-height 起作用的地方 vertical-align 也一定起作用，只是很多时候，vertical-align 默默地在背后起作用，你没有感觉到而已。
 
@@ -330,3 +343,288 @@ vertical-align 和 line-height 之间的关系很明确，即“朋友”关系�
 ## 深入理解 vertical-align 线性类属性值
 
 ### inline-block 与 baseline
+**vertical-align 属性的默认值 baseline 在文本之类的内联元素那里就是字符 x 的下边缘，对于替换元素则是替换元素的下边缘。但是，如果是 inline-block 元素，则规则要复杂了:一个 inline-block 元素，如果里面没有内联元素，或者 overflow 不是 visible，则该元素的基线就是其 margin 底边缘;否则其基线就是元素里面最后一行内联元素的基线。**
+
+还是没反应过来?那看下面这个例子，应该就能知道什么意思了。
+
+两个同尺寸的 inline-block 水平元素，唯一区别就是一个是空的，一个里面有字符，代码如下:
+
+```html
+<style>
+.dib-baseline {
+    display: inline-block;
+    width: 150px; height: 150px;
+    border: 1px solid #cad5eb;
+    background-color: #f0f3f9;
+}
+</style>
+<span class="dib-baseline"></span>
+<span class="dib-baseline">x-baseline</span>
+```
+
+结果如图 5-32 所示。
+
+![5-32](media/5-32.png)
+
+**你会发现，明明尺寸、display 水平都是一样的，结果两个却不在一个水平线上对齐，为什么呢?上面的规范已经说明了一切。第一个框里面没有内联元素，因此基线就是容器的margin 下边缘，也就是下边框下面的位置;而第二个框里面有字符，纯正的内联元素，因此第二个框就是这些字符的基线，也就是字母 x 的下边缘了。于是，我们就看到了左边框框下边缘和右边框框里面字符 x 底边对齐的好戏。**
+
+下面我们要做一件很有必要的事情，来帮助我们理解上面这个复杂的例子在 line-height 值为 0 后的表现。什么事情呢?同情境模拟，我们也设置右边框的 line-height 值为 0，于是，就有所图 5-33 所示的表现。
+
+![5-33](media/5-33.png)
+
+**因为字符实际占据的高度是由 line-height 决定的，当 line-height 变成 0 的时候，字符占据的高度也是 0，此时，高度的起始位置就变成了字符内容区域的垂直中心位置，于是文字就有一半落在框的外面了。由于文字字符上移了，自然基线位置(字母 x 的底边缘)也往上移动了，于是两个框的垂直落差就更大了。**
+
+明白了这个简单例子，也就能明白上面的两端对齐的复杂例子。紧接着上面的复杂例子，如果我们在最后一个占位的i元素后面新增同样的 x-baseline 字符，则结果如图 5-34 所示。
+
+![5-34](media/5-34.png)
+
+这样大家是不是就可以明白为何i元素上面还有一点间隙了?
+
+居然还有人皱眉头?那我再用文字解释下:现在行高 line-height 是 0，则字符 x-baseline 行间距就是-1em，也就是高度为 0，由于 CSS 世界中的行间距是上下等分的，因此，此时字符 x-baseline 的对齐点就是当前内容区域(可以看成文字选中背景区域，如图 5-35 所示，截自 Firefox 浏览器)的垂直中心位置。由于图 5-34 中的 x-baseline 使用的是微软雅黑字体，字形下沉明显，因此，内容区域的垂直中心位置大约在字符 x 的上面 1/4 处，而这个位置就是字符 x-baseline 和最后一行图片下边缘交汇的地方。
+
+![5-35](media/5-35.png)
+
+理解了x-baseline的垂直位置表现，间隙问题就很好理解了。由于前面的`<i class= "justify-fix"></i>`是一个 inline-block 的空元素，因此基线就是自身的底部，于是下 移了差不多 3/4 个 x 的高度，这个下移的高度就是上面产生的间隙高度。
+
+好了，一旦知道了现象的本质，我们就能轻松对症下药了!要么改变占位i元素的基线，要么改造“幽灵空白节点”的基线位置，要么使用其他 vertical-align 对齐方式。
+
+首先来个最有意思的方法，即改变占位i元素的基线。这个很简单，只要在空的i元素里面随便放几个字符就可以了。例如，塞一个空格&nbsp:
+
+```html
+<style>
+.box {
+    text-align: justify;
+    line-height: 0;
+}
+</style>
+<div class="box">
+    <img src="1.jpg" width="96">
+    <img src="1.jpg" width="96">
+    <img src="1.jpg" width="96">
+    <img src="1.jpg" width="96">
+    <i class="justify-fix">&nbsp;</i>
+    <i class="justify-fix">&nbsp;</i>
+    <i class="justify-fix">&nbsp;</i>
+</div>
+```
+
+这时会发现间隙没有了!为什么呢?因为此时i元素的基线是里面字符的基线，此基线 也正好和外面的“幽灵空白节点”的基线位置一致，没有了错位，自然就不会有间隙啦!效果 如图 5-36 所示。
+
+![5-36](media/5-36.png)
+
+改造“幽灵空白节点”的基线位置可以使用 font-size，当字体足够小时，基线和中线会重合在一起。什么时候字体足够小呢?就是 0。于是，如下 CSS 代码(line-height 如果是相对 font-size 的属性值，line-height:0 也可以省掉):
+
+```css
+ .box {
+    text-align: justify;
+    font-size: 0;
+}
+```
+
+效果如图 5-37 所示。
+
+![5-37](media/5-37.png)
+
+看上去好像效果类似，都是没有间隙，但是font-size:0 下的各类对齐效果都更彻底。使用其他 vertical-align 对齐方式就是让i占位元素 vertical-align:top/bottom 之类，当前，前提还是先让容器 line-height:0，例如:
+
+```css
+.box {
+    text-align: justify;
+    line-height: 0;
+}
+.justify-fix {
+    vertical-align: bottom; /* top、middle 都可以 */ 
+}
+```
+
+👉 [example](https://demo.cssworld.cn/5/3-6.php)
+
+准确了解 inline-block 与 baseline 之间多变的关系，除了便于理解一些令人抓狂的现象外，还可以专门利用其来简化我们的开发，比方说一 直很头疼的背景小图标和文字对齐的问题。我这里再给大家介绍一个 vertical-align 负值以外的其他处理技巧。
+
+例如，要删除一个小图标，通常的做法无非是下面两种:
+
+```html
+<i class="icon-delete"></i> 删除
+```
+
+或者直接一个按钮图标，里面包含文本内容，保证可访问性:
+
+```html
+<i class="icon-delete">删除</i>
+```
+
+**而以上两种实现基本上图标元素的基线都是元素的下边缘，之前讲过 inline-block 元素的基线规则:一个 inline-block 元素，如果里面没有内联元素，或者 overflow 不是 visible，则该元素的基线就是其 margin 底边缘。**
+
+**上面的第一种做法中，`<i class="icon-delete"></i>`是一个空标签，里面无内联元素，因此，基线是底边缘;而第二种做法中，虽然里面有文字，但是此文字是不显示的，因此 开发者习惯设overflow:hidden，这又导致基线是底边缘。而正是由于基线是元素底边缘，才导致图标和文字默认严重不对齐!但是，我们不妨反过来试想下，如果图标和后面的文字高度一致，同时图标的基线和文字基线一样，那岂不是图标和文字天然对齐，根本就不需要 margin 或 vertical-align 的垂直偏移了?**
+
+完全可行，这里分享一下我总结的一套基于 20px 图标对齐的处理技巧，该技巧有下面 3 个要点。
+
++ **图标高度和当前行高都是 20px。很多小图标背景合并工具都是图标宽高多大生成的 CSS 宽高就是多大，这其实并不利于形成可以整站通用的 CSS 策略，我的建议是图标原图先扩展成统一规格，比方说这里的 20px×20px，然后再进行合并，可以节约大量 CSS 以及对每个图标对齐进行不同处理的开发成本。**
++ **图标标签里面永远有字符。这个可以借助:before 或:after 伪元素生成一个空格字符轻松搞定。**
++ **图标 CSS 不使用 overflow:hidden 保证基线为里面字符的基线，但是要让里面潜在的字符不可见。**
+
+于是，最终形成的最佳图标实践 CSS 如下:
+
+```css
+ .icon {
+    display: inline-block;
+    width: 20px; height: 20px;
+    background: url(sprite.png) no-repeat;
+    white-space: nowrap;
+    letter-spacing: -1em;
+    text-indent: -999em;
+}
+.icon:before {
+    content: '\3000';
+}
+/* 具体图标 */ 
+.icon-xxx {
+    background-position: 0 -20px;
+}
+```
+
+现在，我们套用这里的 20px 处理的策略，看看上面两种删除小图标处理的对齐效果如何
+
+👉 [example](https://demo.cssworld.cn/5/3-7.php)
+
+**可以看到，小图标和文字对齐完全不受 font-size 大小的影响。可以说，整个网站所有小图标的对齐问题都可以解决了，节省了大量 CSS 代码，降低了大量开发和维护成本，是个好处非常明显的处理技巧。**
+
+**最后有必要说明一下，这里 20px 只是一种经验取值，因为目前的常见站点的字号和行间距比较合乎这个大小。如果你的项目设计很大气，字号默认都是 16px，那么图标规格和默认行号可能 24px 会更合适一点。**
+
+### 了解 vertial-align:top/bottom
+vertial-align:top 和 vertial-align:bottom 基本表现类似，只是一个“上”一个“下”，因此合在一起讲。
+
+顾名思义，vertial-align:top 就是垂直上边缘对齐，具体定义如下。
++ **内联元素:元素底部和当前行框盒子的顶部对齐。**
++ **table-cell 元素:元素底 padding 边缘和表格行的顶部对齐。**
+
+**用更通俗的话解释就是:如果是内联元素，则和这一行位置最高的内联元素的顶部对齐;如果 display 计算值是 table-cell 的元素，我们不妨脑补成td元素，则和tr元素上边缘对齐。**
+
+**vertial-align:bottom 声明与此类似，只是把“顶部”换成“底部”，把“上边缘”换成“下边缘”。**
+
+> **需要注意的是，内联元素的上下边缘对齐的这个“边缘”是当前“行框盒子”的上下边缘，并不是块状容器的上下边缘。**
+
+vertial-align 属性中的 top 和 bottom 值可以说是最容易理解的 vertial-align 属性值了，并且表现相当稳定，不会出现难以理解的现象，在实际开发的时候也相当常用。
+
+末了，出个小题测试下大家:已知一个div元素中有两张图片，其中后面一张图片设置了 vertial-align:bottom，请问这两张图片的底边缘是对齐的吗?
+
+![5-39](media/5-39.png)
+
+答案:**不是不对齐的。因为图片所在行框盒子的最低点是“幽灵空白节点”的底部**，所以最后的表现会如图 5-39 所示。
+
+### vertial-align:middle 与近似垂直居中
+在 5.2 节已提到，line-height 和 vertial-align: middle 实现的多行文本或者图片的垂直居中全部都是“近似垂直居中”，原因与vertial- align:middle的定义有关。
+
++ **内联元素:元素的垂直中心点和行框盒子基线往上 1/2 x-height 处对齐。**
++ **table-cell 元素:单元格填充盒子相对于外面的表格行居中对齐。**
+
+**table-cell 元素的 vertial-align:middle 中规中矩，没什么好说的，倒是内联元素的 vertial-align:middle 有很多说不完的故事。定义中“基线往上 1/2 x-height 处”，指的就是 middle 的位置，仔细品味一下，“基线”就是字符 x 底边缘，而 x-height 就是字符 x 的高度。考虑到大部分字体的字符 x 上下是等分的，因此，从“基线往上 1/2x-height 处”我们就可以看出是字符 x 中心交叉点的位置。换句话说就是，vertial-align:middle 可以让内联元素的真正意义上的垂直中心位置和字符 x 的交叉点对齐。**
+
+**基本上所有的字体中，字符 x 的位置都是偏下一点儿的，font-size 越大偏移越明显，这才导致默认状态下的 vertial-align:middle 实现的都是“近似垂直居中”。**
+
+👉 [example](https://demo.cssworld.cn/5/3-8.php)
+
+演示页面有两条水平线，其中，图片上线显示的是图片垂直中心位置，而贯穿整个容器的线就是容器的垂直中心位置，可以看到，默认状态下，两根线就不在一个水平线上
+
+**因为图片上的那根线趋向于和字符 x 的中心靠近，而不是容器的垂直中心。如果我们把 font-size 改大，如 48px，则效果更加明显**
+
+> 如果想要实现真正意义上的垂直居中对齐，只要想办法让字符 x 的中心位置就是容器的垂直中心位置即可，通常的做法是设置 font-size:0，整个字符 x 缩小成了一个看不见的点，根据 line-height 的半行间距上下等分规则，这个点就正好是整个容器的垂直中心位置，这样就可以实现真正意义上的垂直居中对齐了。
+
+**不过话又说回来，平常我们开发的时候，font-size可能就 12px 或 14px，虽然最终的效果是“近似垂直居中”，但偏差也就 1px~2px 的样子，普通用户其实是很难觉察到其中的差异的，因此，是否非要真正意义上垂直居中，还是要根据项目的实现情况权衡做出决策。**
+
+## 深入理解 vertical-align 文本类属性值
+文本类属性值指的就是 text-top 和 text-bottom，定义如下。
++ **vertical-align:text-top:盒子的顶部和父级内容区域的顶部对齐。**
++ **vertical-align:text-bottom:盒子的底部和父级内容区域的底部对齐。**
+
+**其中，理解的难点在于“父级内容区域”，这是个什么东西呢?**
+
+**内容区域从 3.4.2 节开始就有多次提及，在本书中，其可以看成是 Firefox/IE 浏览器文本选中的背景区域，或者默认状态下的内联文本的背景色区域。而所谓“父级内容区域”指的就是在父级元素当前 font-size 和 font-family 下应有的内容区域大小。**
+
+**因此，这个定义又可以理解为(以 text-top 举例):假设元素后面有一个和父元素 font-size、font-family 一模一样的文字内容，则 vertical-align:text-top 表示元素和这个文字的内容区域的上边缘对齐。**
+
+👉 [example](https://demo.cssworld.cn/5/3-9.php)
+
+**此演示页面有 3 个不同 font-size，分别是 16px、24px 和 32px。父元素默认是 16px，我们可以清晰地看到图片的上边缘和 16px 文字的内容区域的上边缘对齐了。点击其他单选按钮，改变父级元素的
+font-size 大小，如 24px，就会看到图片上边缘(对齐线)和 24px 字号大小的文字的内容区域的上边缘对齐了。**
+
+好了，现在我们深入理解了文本类属性值的表现规则，这对我们实际开发有什么用呢?我这里郑重地告诉大家:没有任何作用。准确地讲，应该是其和其他垂直定位属性相比没有任何的优势，尽管理论上讲其特点明确，并且具有以下几个明显的优势。
+
+## 简单了解 vertical-align 上标下标类属性值
+vertical-align 上标下标类属性值指的就是 sub 和 super 两个值，分别表示下标和上标。在 HTML 代码中，有两个标签语义就是下标和上标，分别是上标sup和下标sub，因为这两个 HTML 标签长得很类似，所以很多人经常记不清到底哪个是上标哪个是下标。我告诉大家一个记忆方法，就是看 p 和 b 两个字母的圈圈位置，如果圈圈在上面，就是“上标”，如果圈圈在下面，就是“下标”。
+
+## 无处不在的 vertical-align
+**本节算是对之前内容的一个必要的总结。对于内联元素，如果大家遇到不太好理解的现象，请一定要意识到，有个“幽灵空白节点”以及无处不在的 vertical-align 属性。**
+
+> **虽然同属线性类属性值，但是 top/bottom 和 baseline/middle 却是完全不同的两个帮派，前者对齐看边缘看行框盒子，而后者是和字符 x 打交道。因此，细细考究，两者的行为表现实则大相径庭，一定要注意区分。**
+
+**vertical-align 属性值的理解可以说是 CSS 世界中的最难点。首先，需要深入了解内联盒模型;其次，不同属性值定义完全不同，且很多属性 table-cell 元素有着不同的定义; 同时最终表现与字符 x、line-height，和 font-size、font-family 属性密切相关，如果要通透，需要对这些属性都有比较深入的了解，因此，本章的内容是值得反复研读的。**
+
+本章目前给出的所有示例都是展示单属性值和默认值baseline如何作用的，但是实际开发的时候，经常会出现前后两个内联元素同时设置 baseline 以外属性值的情况，有些人可能会手足无措，毕竟单个属性值的理解就够呛，多个属性一起岂不脑子都转不过来?实际上，根据我的反复测试和确认，vertical-align 各类属性值不存在相互冲突的情况，虽然某个 vertical-align 属性值确实会影响其他元素的表现，但是这种作用并不是直接的。所以，在分析复杂场景的时候，仅需要套用定义分析当前 vertical-align 值的作用就可以了。
+
+## 基于 vertical-align 属性的水平垂直居中弹框
+最后，推荐一个我自己觉得非常棒的 vertical-align 属性实践，就是使用纯 CSS 实现大小不固定的弹框永远居中的效果，并且如果伪元素换成普通元素，连 IE7 浏览器都可以兼容。
+
+其 HTML 结构很简单，一个 container，显示半透明背景，然后里面的子元素就是弹框主体，假设类名是.dialog，则 HTML 如下:
+
+```html
+<div class="container">
+    <div class="dialog"></dialog>
+</div>
+```
+
+核心 CSS 代码如下:
+
+```css
+.container {
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background-color: rgba(0,0,0,.5);
+      text-align: center;
+      font-size: 0;
+      white-space: nowrap;
+      overflow: auto;
+    }
+    .container:after {
+      content: '';
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+}
+.dialog {
+      display: inline-block;
+      vertical-align: middle;
+      text-align: left;
+      font-size: 14px;
+      white-space: normal;
+}
+```
+
+👉 [example](https://demo.cssworld.cn/5/3-10.php)
+
+此时，无论浏览器尺寸是多大，也无论弹框尺寸是多少，我们的弹框永远都是居中的。
+
+目前主流实现，尤其传统 PC 端页面，几乎都是根据浏览器的尺寸和弹框大小使用 JavaScript 精确计算弹框的位置。相比传统的 JavaScript 定位，这里的方法优点非常明显。
+
++ **节省了很多无谓的定位的 JavaScript 代码，也不需要浏览器 resize 事件之类的处理，当弹框内容动态变化的时候，也无须重新定位。**
++ **性能更改、渲染速度更快，毕竟浏览器内置 CSS 的即时渲染显然比 JavaScript 的处理要更好。**
++ **可以非常灵活控制垂直居中的比例**，比方说设置:
+    ```css
+    .container:after {
+        height: 90%;
+    }
+    ```
+    则弹框不是垂直居中对齐，而是近似上下 2:3 这种感觉的对齐，反而会让人有视觉上居中的 感觉。
++ **容器设置 overflow:auto 可以实现弹框高度超过一屏时依然能看见屏幕外的内容，传统实现方法则比较尴尬。**
+
+然后，这里的技巧还有一个关键点是半透明黑色蒙层和弹框元素是在一起的父子关系。所以，上面的示例代码中，半透明黑色蒙层效果借助 rgba 半透明背景色实现，对于不支持 rgba 的 IE8 浏览器，我建议制作一个例如 10 像素×10 像素的同等效果的半透明 PNG 图片，然后作为 base64 URL 地址直接使用，可参考上面的演示 3-10，或者也可以使用 IE 的渐变滤镜实现。然后，这里的技巧还有一个关键点是半透明黑色蒙层和弹框元素是在一起的父子关系。所以，上面的示例代码中，半透明黑色蒙层效果借助 rgba 半透明背景色实现，对于不支持 rgba 的 IE8 浏览器，我建议制作一个例如 10 像素×10 像素的同等效果的半透明 PNG 图片，然后作为 base64 URL 地址直接使用，可参考上面的演示 3-10，或者也可以使用 IE 的渐变滤镜实现。
+
+此方法实现的原理关键就是两个 vertical-align:middle，前面“图片近似垂直居中”那里只图片一个元素 vertical-align:middle 就实现了垂直居中，原因就是 line-height 大小设置得恰到好处，但是对于弹框，高度不确定，显然不能使用某个具体的行高值创建足够高的内联元素。于是，这里借助伪元素创建了一个和外部容器一样高的宽度为 0 的 inline-block 元素。有种“幽灵空白节点”的感觉。
+
+下面是原理作用的关键部分，在 5.3.7 节讲过如何分析多个 vertical-align 的作用，根据定义专注当前元素即可。vertical-align:middle 定义是元素的中线和字符 x 中心点对齐。
+
++ 在本例中，由于 font-size 设置为 0，所以 x 中心点位置就是.container 的上边缘，此时，高度 100%的宽度为 0 的伪元素和这个中心点对齐。如果中心点位置不动，这个伪元素上面一半的位置应该在.container 的外面，但是 CSS 中默认是左上方排列对齐的，所以，伪元素和这个原本在容器上边缘的 x 中心点一起往下移动了半个容器高度，也就是此时 x 中心点就在容器的垂直中心线上。
++ 弹框元素.dialog也设置了 vertical-align:middle。根据定义，弹框的垂直中心位置和 x 中心点位置对齐，此时，x 中心点就在容器的垂直中心位置，于是.dialog 元素就和容器的垂直中心位置对齐了，从而实现了垂直居中效果。
++ 水平居中就 text-align:center 实现，非常好理解。
+
+按照初衷，块级元素负责布局，内联元素设置内容。但是，这里的弹框居中却是把块级元素内联化，利用一些内联属性实现垂直居中效果，这也是不得已而为之，因为 vertical-align 等内联属性确实比块级属性强悍，也正因为 CSS 世界在布局上的弱势，后来多栏布局、弹性盒子布局以及栅格布局一个一个都出来补强了。
