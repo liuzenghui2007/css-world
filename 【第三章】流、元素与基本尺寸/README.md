@@ -138,7 +138,7 @@ a元素默认display是inline，所以，设置display:block使其块状化绝�
 
 👉 [example](https://demo.cssworld.cn/3/2-5.php)
 
-> 除了inline-block元素，浮动元素以及决定定位元素都具有包裹性，均有类似的智能宽度行为
+> 除了inline-block元素，浮动元素以及绝对定位元素都具有包裹性，均有类似的智能宽度行为
 
 ##### 2.首选最小宽度
 
